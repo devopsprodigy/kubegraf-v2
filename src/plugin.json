@@ -1,0 +1,53 @@
+{
+  "type": "app",
+  "name": "DevOpsProdigy KubeGraf 2.0",
+  "id": "devopsprodigy-kubegrafv2-app",
+  "dependencies": {
+    "grafanaDependency": ">=8.0.0",
+    "plugins": [
+      {
+        "name": "Pie Chart",
+        "id": "grafana-piechart-panel",
+        "type" : "panel",
+        "version": ">=1.3.7"
+      }
+    ]
+  },
+  "info": {
+    "description" : "An updated version of the Grafana App for Kubernetes plugin, this plugin allows you to visualize and analyze your Kubernetes cluster’s performance. It demonstrates in graphics the main service metrics and characteristics of the Kubernetes cluster. It also makes it easier to examine the application’s life cycle and error logs.",
+    "author"      : {
+      "name"  : "DevOpsProdigy",
+      "url"   : "https://devopsprodigy.com/",
+      "email" : "develop@devopsprodigy.com"
+    },
+    "keywords"  : ["DevOpsProdigy", "kubernetes", "monitoring", "prometheus"],
+    "logos": {
+      "small": "img/grafanaLogo.png",
+      "large": "img/grafanaLogo.png"
+    },
+    "links" : [
+      {"name" :  "DevOpsProdigy", "url" :  "https://devopsprodigy.com/"},
+      {"name": "Project site", "url" : "https://devopsprodigy.com/products/kubegraf"},
+      {"name" : "GitHub", "url" : "https://github.com/devopsprodigy/kubegraf"},
+      {"name" : "ChangeLog", "url" : "https://github.com/devopsprodigy/kubegraf/blob/master/CHANGELOG.md"},
+      {"name" : "License", "url": "https://github.com/devopsprodigy/kubegraf/blob/master/LICENSE"},
+      {"name" : "Telegram", "url": "https://t.me/kubegraf"},
+      {"name": "Slack", "url": "https://join.slack.com/t/devopsprodigygroup/shared_invite/enQtODM0Nzc2NjkwNzkwLTgwMGUwYzFiMDU1N2Y2OWM2NjdiYTc2YjU2NDFmYjQ1NDY5YzM1OGYwMDRjOWZmNDYxOTMxODYzZjc0Mjg3MDc"}
+    ],
+    "screenshots": [
+      {"name": "Deployments dashboard", "path": "img/deployments_dashboard_1.png"},
+      {"name": "Deployments dashboard", "path": "img/n5_deployments_dashboard_2.png"},
+      {"name": "Pod resources dashboard", "path": "img/n5_pods_dashboard.png"},
+      {"name": "Node dashboard", "path": "img/n_node_dashboard_1.png"},
+      {"name": "Node dashboard", "path": "img/n_node_dashboard_2.png"},
+      {"name": "Nodes overview", "path": "img/n5_node_overview.png"},
+      {"name": "Application overview", "path": "img/n_applications_overview_1.png"},
+      {"name": "Application overview", "path": "img/n_applications_overview_2.png"},
+      {"name": "Application overview", "path": "img/n_applications_overview_3.png"},
+      {"name": "Cluster status", "path": "img/cluster_status_1.png"},
+      {"name": "Cluster status", "path": "img/cluster_status_2.png"}
+    ],
+    "version": "2.0.0",
+    "updated": "2021-09-07"
+  }
+}

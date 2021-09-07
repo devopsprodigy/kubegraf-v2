@@ -3,7 +3,8 @@
   "name": "DevOpsProdigy KubeGraf 2.0",
   "id": "devopsprodigy-kubegrafv2-app",
   "dependencies": {
-    "grafanaDependency": ">=8.0.0",
+    "grafanaDependency": ">=8.0.1",
+    "grafanaVersion": "8.0",
     "plugins": [
       {
         "name": "Pie Chart",

@@ -4,7 +4,6 @@ import {GlobalSettings} from "../types";
 
 export class App extends PureComponent<AppRootProps<GlobalSettings>>{
     render(){
-        //const {meta} = this.props;
 
         return(
             <h1>asd</h1>

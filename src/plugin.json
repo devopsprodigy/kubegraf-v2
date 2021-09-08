@@ -50,5 +50,21 @@
     ],
     "version": "2.0.0",
     "updated": "2021-09-07"
-  }
+  },
+  "includes" : [
+    {
+      "type" : "page",
+      "name" : "Clusters",
+      "path" : "/a/devopsprodigy-kubegrafv2-app/?page=clusters-list",
+      "addToNav" : true,
+      "icon" : "list-ul",
+      "role" : "Viewer"
+    },{
+      "type" : "page",
+      "name" : "Config",
+      "path" : "/plugins/devopsprodigy-kubegrafv2-app",
+      "addToNav" : true,
+      "icon" : "cog"
+    }
+  ]
 }

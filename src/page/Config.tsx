@@ -68,6 +68,9 @@ export class ConfigPage extends PureComponent<Props> {
                         <br/><br/>
                         This plugin allows you to visualize and analyze your Kubernetes cluster’s performance. It demonstrates in graphics the main service metrics and characteristics of the Kubernetes cluster. It also makes it easier to examine the application’s life cycle and error logs.
                     </p>
+                    {this.plugin.meta.enabled && (
+                        <p>Plugin installed successfully!<br/>Go to the <a href="/a/devopsprodigy-kubegrafv2-app/?page=clusters-list" className="highlight-word">Clusters list page</a></p>
+                    )}
                 </div>
                 <br/>
                 { this.getAction() }

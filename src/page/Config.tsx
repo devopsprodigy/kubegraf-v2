@@ -3,15 +3,65 @@ import {AppPluginMeta, PluginConfigPageProps} from "@grafana/data";
 import {GlobalSettings} from "../types";
 import {Button} from "@grafana/ui";
 
+import {getBackendSrv} from '@grafana/runtime';
+
 interface Props extends PluginConfigPageProps<AppPluginMeta<GlobalSettings>> {}
 
 export class ConfigPage extends PureComponent<Props> {
+
+    private plugin;
+
+    constructor(props : any) {
+        super(props);
+        this.plugin = props.plugin;
+    }
+
+
+    getAction = () => {
+
+        if(this.plugin.meta.enabled){
+            return (
+                <Button variant="destructive" onClick={this.disablePlugin}>Disable plugin</Button>
+            )
+        }else {
+            return (
+                <Button variant="primary" onClick={this.enablePlugin}>Enable plugin</Button>
+            )
+        }
+    }
+
+    enablePlugin = async () => {
+        const pluginId = this.plugin.meta.id;
+        await getBackendSrv()
+            .fetch({
+                url: `/api/plugins/${pluginId}/settings`,
+                method: 'POST',
+                data: {
+                    enabled: true,
+                    pinned: true
+                }
+            }).toPromise();
+        window.location.reload();
+    }
+
+    disablePlugin = async () => {
+        const pluginId = this.plugin.meta.id;
+        await getBackendSrv()
+            .fetch({
+                url: `/api/plugins/${pluginId}/settings`,
+                method: 'POST',
+                data: {
+                    enabled: false
+                }
+            }).toPromise();
+        window.location.reload();
+    }
+
     render() {
-        //const {plugin} = this.props;
 
         return (
             <div>
-                <div class="card-item">
+                <div className="card-item">
                     <h4>DevOpsProdigy KubeGraf</h4>
                     <p>
                         An updated version of the DevOpsProdigy KubeGraf App plugin (<a className="highlight-word" href="https://grafana.com/grafana/plugins/devopsprodigy-kubegraf-app/" target="_blank">https://grafana.com/grafana/plugins/devopsprodigy-kubegraf-app/</a>) that is compatible with Grafana 8.*
@@ -20,7 +70,7 @@ export class ConfigPage extends PureComponent<Props> {
                     </p>
                 </div>
                 <br/>
-                <Button variant="primary">Enable plugin</Button>
+                { this.getAction() }
             </div>
         )
     }

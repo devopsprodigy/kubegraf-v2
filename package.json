@@ -22,6 +22,7 @@
     "node": ">=14"
   },
   "dependencies": {
+    "@grafana/runtime": "^8.1.2",
     "react": "^17.0.2"
   }
 }

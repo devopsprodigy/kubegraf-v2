@@ -65,6 +65,12 @@
       "path" : "/plugins/devopsprodigy-kubegrafv2-app",
       "addToNav" : true,
       "icon" : "cog"
+    },
+    {
+      "type" : "page",
+      "name" : "Cluster Config",
+      "path" : "/a/devopsprodigy-kubegrafv2-app/?page=cluster-config",
+      "addToNav" : false
     }
   ]
 }

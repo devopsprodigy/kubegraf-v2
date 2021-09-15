@@ -1,3 +1,1 @@
-export interface GlobalSettings {
-
-}
+export interface GlobalSettings {}

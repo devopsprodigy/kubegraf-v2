@@ -71,6 +71,36 @@
       "name" : "Cluster Config",
       "path" : "/a/devopsprodigy-kubegrafv2-app/?page=cluster-config",
       "addToNav" : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Node's Dashboard",
+      "path"      : "dashboards/node.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Pod's Dashboard",
+      "path"      : "dashboards/pod-resources.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Deployment's Dashboard",
+      "path"      : "dashboards/deployment.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Daemonset's Dashboard",
+      "path"      : "dashboards/daemonset.json",
+      "addToNav"  : false
+    },
+    {
+      "type"      : "dashboard",
+      "name"      : "DOP Statefulset's Dashboard",
+      "path"      : "dashboards/statefulset.json",
+      "addToNav"  : false
     }
   ]
 }

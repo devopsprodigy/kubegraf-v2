@@ -14,7 +14,7 @@ export const ClustersListPage = () => {
         </div>
         <div className="col-md-6">
             <div className="pull-right">
-                <a href="">
+                <a href="/plugins/devopsprodigy-kubegrafv2-app?page=dashboards">
                     <Button variant="primary"><i className="fa fa-fw fa-tachometer"></i>&nbsp;&nbsp;Dashboards</Button>
                 </a>
                 &nbsp;

@@ -3,7 +3,6 @@ import { GlobalSettings } from '../types';
 import React from 'react';
 import { getLocationSrv } from '@grafana/runtime';
 import { ClustersListPage } from '../page/ClustersList';
-import {ClusterConfigPage} from "../page/ClusterConfig";
 
 type Page = {
   id: string;
@@ -15,8 +14,8 @@ const pages: Page[] = [
     id: 'clusters-list',
   },
   {
-    id: 'cluster-config'
-  }
+    id: 'cluster-config',
+  },
 ];
 
 const getPage = (query: any) => {
@@ -32,8 +31,8 @@ const getPage = (query: any) => {
   switch (targetPage.id) {
     case 'clusters-list':
       return <ClustersListPage />;
-    case 'cluster-config':
-      return <ClusterConfigPage />;
+    /*case 'cluster-config':
+      return <ClusterConfigPage />;*/
     default:
       getLocationSrv().update({
         path: '/plugins/devopsprodigy-kubegrafv2-app',

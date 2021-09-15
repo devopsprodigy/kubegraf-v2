@@ -1,0 +1,28 @@
+{
+  "name"  : "DevOpsProdigy KubeGraf DS v2",
+  "id"    : "devopsprodigy-kubegrafv2-ds",
+  "type"  : "datasource",
+  "metrics" : true,
+  "info": {
+    "description" : "DevOpsProdigy KubeGraf datasource",
+    "author"      : {
+      "name"  : "DevOpsProdigy",
+      "url"   : "https://devopsprodigy.com/"
+    },
+    "logos": {
+      "small": "img/grafanaLogo.png",
+      "large": "img/grafanaLogo.png"
+    },
+    "links" : [
+      {"name" : "GitHub", "url" : "https://github.com/devopsprodigy/kubegraf"},
+      {"name" : "License", "url": "https://github.com/devopsprodigy/kubegraf/blob/master/LICENSE"}
+    ],
+    "version": "2.0.0",
+    "updated" : "2021-09-07"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=8.0.1",
+    "grafanaVersion": "8.0",
+    "plugins": []
+  }
+}

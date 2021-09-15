@@ -101,6 +101,10 @@
       "name"      : "DOP Statefulset's Dashboard",
       "path"      : "dashboards/statefulset.json",
       "addToNav"  : false
+    },
+    {
+      "type" : "datasource",
+      "name" : "DOP KubeGrafDS v2"
     }
   ]
 }

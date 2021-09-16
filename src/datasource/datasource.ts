@@ -1,5 +1,5 @@
 import { DataFrame, DataQueryRequest, DataQueryResponse, DataSourceApi } from '@grafana/data';
-import {KubegrafDSOptions, KubegrafDSQuery} from "../types";
+import { KubegrafDSOptions, KubegrafDSQuery } from '../types';
 
 export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafDSOptions> {
   async query(request: DataQueryRequest<KubegrafDSQuery>): Promise<DataQueryResponse> {

@@ -10,7 +10,7 @@
         "name": "Pie Chart",
         "id": "grafana-piechart-panel",
         "type" : "panel",
-        "version": ">=1.3.7"
+        "version": ">=1.6.2"
       }
     ]
   },

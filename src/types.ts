@@ -14,7 +14,7 @@ export interface SecureJsonData {
 
 export interface KubegrafDSQuery extends DataQuery {}
 
-export interface PromsList {
+export interface PromInstance {
   value: string;
   label: string;
   isDefault: boolean | undefined;

@@ -66,7 +66,6 @@ const getPrometheusList = async (options : Props['options'], onOptionsChange: Pr
                 }
             })
         }
-        console.log(options.jsonData.prometheus_name);
     })
 }
 

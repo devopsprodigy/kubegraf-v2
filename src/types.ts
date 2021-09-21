@@ -19,3 +19,8 @@ export interface PromInstance {
   label: string;
   isDefault: boolean | undefined;
 }
+
+export interface K8sCluster {
+  uid: string;
+  name: string;
+}

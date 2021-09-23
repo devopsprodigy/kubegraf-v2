@@ -37,7 +37,6 @@ export class ClustersListPage extends PureComponent{
       type    : DS_ID,
       access  : "proxy",
       jsonData : {
-        prometheus_name: '',
         access_via_token: false,
         refresh_pods_rate: 60
       }

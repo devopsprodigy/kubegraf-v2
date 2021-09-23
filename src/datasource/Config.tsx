@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 import { DataSourcePluginOptionsEditorProps } from '@grafana/data';
-import { DataSourceHttpSettings } from '@grafana/ui';
+import {Button, DataSourceHttpSettings} from '@grafana/ui';
 import { KubegrafDSOptions, SecureJsonData } from '../types';
 import { TokenConfig } from './partials/TokenConfig';
 import {KubegrafConfig} from "./partials/KubegrafConfig";
@@ -21,6 +21,13 @@ export const ConfigPage: ComponentType<Props> = ({ options, onOptionsChange }) =
       <hr />
 
       <KubegrafConfig options={options} onOptionsChange={onOptionsChange}/>
+
+        <hr/>
+        <a href="/a/devopsprodigy-kubegrafv2-app/?page=clusters-list">
+            <Button variant="primary">
+                <i className="fa fa-fw fa-list-ul"/>&nbsp;&nbsp;Clusters
+            </Button>
+        </a>
     </>
   );
 };

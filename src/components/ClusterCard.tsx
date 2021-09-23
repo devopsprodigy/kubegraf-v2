@@ -3,7 +3,8 @@ import {K8sCluster} from "../types";
 import {Button, ConfirmModal} from "@grafana/ui";
 
 interface Props {
-    cluster: K8sCluster
+    cluster: K8sCluster,
+    clusterDelete: (uid: string) => void
 }
 
 export class ClusterCard extends PureComponent<Props>{
@@ -30,6 +31,11 @@ export class ClusterCard extends PureComponent<Props>{
         this.setState({showDeleteModal: false});
     }
 
+    handleDelete = (uid: string) =>{
+        this.props.clusterDelete(uid);
+        this.hideDeleteModal();
+    }
+
     render() {
         return (
             <>
@@ -38,7 +44,7 @@ export class ClusterCard extends PureComponent<Props>{
                         <div className="card-section">
                             <div className="card-item">
                                 <div className="card-item-header">
-                                    <h2>{ this.cluster.name }</h2>
+                                    <h2>{ this.cluster.name }  {this.cluster.uid}</h2>
                                 </div>
                                 <hr/>
                                 <div className="row">
@@ -74,7 +80,9 @@ export class ClusterCard extends PureComponent<Props>{
                                                 title="Delete cluster"
                                                 body="Are you sure you want to delete this cluster?"
                                                 confirmText="Yes"
-                                                onConfirm={() => {}}
+                                                onConfirm={() => {
+                                                    this.handleDelete(this.cluster.uid);
+                                                }}
                                                 onDismiss={this.hideDeleteModal}
                                             />
                                             <Button variant="destructive" onClick={this.showDeleteModal}>

@@ -3,7 +3,7 @@ import { Button, Icon, LoadingPlaceholder } from '@grafana/ui';
 import {DS_ID} from "../constants";
 import {getBackendSrv, getLocationSrv} from "@grafana/runtime";
 import {K8sCluster} from "../types";
-import {ClustersListComponent} from "../components/ClustersListComponent";
+import {ClusterCard} from "../components/ClusterCard";
 
 export class ClustersListPage extends PureComponent{
 
@@ -11,6 +11,24 @@ export class ClustersListPage extends PureComponent{
     visible: false,
     clusters: []
   }
+
+
+  deleteCluster =  (uid: string)  => {
+    getBackendSrv().delete(`/api/datasources/uid/${uid}`)
+        .then(() => {
+          let clusters = this.state.clusters.filter((item : K8sCluster) => item.uid !== uid);
+          this.setState({
+            visible: true,
+            clusters: []
+          }, () => {
+            this.setState({
+              visible: true,
+              clusters: clusters
+            })
+          });
+        })
+  }
+
 
   createCluster = async () => {
     const name = this.generateName();
@@ -84,7 +102,6 @@ export class ClustersListPage extends PureComponent{
             }
           });
         });
-    console.log(clusters);
     this.setState({
       visible: true,
       clusters: clusters
@@ -130,8 +147,9 @@ export class ClustersListPage extends PureComponent{
           {!this.state.visible && (
               <LoadingPlaceholder text="Loading..." />
           )}
-
-          {this.state.visible && (<ClustersListComponent clusters={this.state.clusters} />)}
+          {this.state.visible && this.state.clusters.map((cluster: K8sCluster) => {
+            return (<ClusterCard cluster={cluster} clusterDelete={this.deleteCluster.bind(cluster.uid)}/>);
+          })}
         </>
     );
   }

@@ -24,7 +24,7 @@ const getPage = (query: any) => {
   })[0];
   if (targetPage === undefined) {
     getLocationSrv().update({
-      path: '/plugins/devopsprodigy-kubegrafv2-app',
+      path: '/plugins/devopsprodigy-kubegraf-app',
     });
   }
 
@@ -35,7 +35,7 @@ const getPage = (query: any) => {
       return <ClusterConfigPage />;*/
     default:
       getLocationSrv().update({
-        path: '/plugins/devopsprodigy-kubegrafv2-app',
+        path: '/plugins/devopsprodigy-kubegraf-app',
       });
       return false;
   }
@@ -54,7 +54,7 @@ export const Router = ({ query }: AppRootProps<GlobalSettings>) => {
             <span className="page-header__logo">
               <img
                 className="page-header__img"
-                src="public/plugins/devopsprodigy-kubegrafv2-app/img/grafanaLogo.png"
+                src="public/plugins/devopsprodigy-kubegraf-app/img/grafanaLogo.png"
                 alt="logo of DevOpsProdigy KubeGraf 2.0"
               />
             </span>

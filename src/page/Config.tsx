@@ -86,7 +86,7 @@ export class ConfigPage extends PureComponent<Props> {
               Plugin installed successfully!
               <br />
               Go to the{' '}
-              <a href="/a/devopsprodigy-kubegrafv2-app/?page=clusters-list" className="highlight-word">
+              <a href="/a/devopsprodigy-kubegraf-app/?page=clusters-list" className="highlight-word">
                 Clusters list page
               </a>
             </p>

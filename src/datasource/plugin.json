@@ -1,6 +1,6 @@
 {
   "name"  : "DevOpsProdigy KubeGraf DS v2",
-  "id"    : "devopsprodigy-kubegrafv2-ds",
+  "id"    : "devopsprodigy-kubegraf-ds",
   "type"  : "datasource",
   "metrics" : true,
   "info": {
@@ -24,5 +24,18 @@
     "grafanaDependency": ">=8.0.1",
     "grafanaVersion": "8.0",
     "plugins": []
-  }
+  },
+  "routes" : [
+    {
+      "path" : "__proxy",
+      "method" : "GET",
+      "url" : "{{ .JsonData.cluster_url }}",
+      "headers" : [
+        {
+          "name"    : "Authorization",
+          "content" : "Bearer {{ .SecureJsonData.access_token }}"
+        }
+      ]
+    }
+  ]
 }

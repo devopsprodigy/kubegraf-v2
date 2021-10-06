@@ -38,7 +38,7 @@ export class ClustersListPage extends PureComponent{
       access  : "proxy",
       jsonData : {
         access_via_token: false,
-        refresh_pods_rate: 60
+        refresh_pods_rate: '60'
       }
     }
 
@@ -89,6 +89,7 @@ export class ClustersListPage extends PureComponent{
   }
 
   loadClusters = async () => {
+
     let clusters : K8sCluster[] = [];
     await getBackendSrv().get('/api/datasources')
         .then(res => {
@@ -110,6 +111,7 @@ export class ClustersListPage extends PureComponent{
   constructor(props: any) {
     super(props);
     this.loadClusters().then(() => {});
+
   }
 
   render() {
@@ -127,13 +129,13 @@ export class ClustersListPage extends PureComponent{
             </div>
             <div className="col-md-6">
               <div className="pull-right">
-                <a href="/plugins/devopsprodigy-kubegrafv2-app?page=dashboards">
+                <a href="/plugins/devopsprodigy-kubegraf-app?page=dashboards">
                   <Button variant="primary">
                     <i className="fa fa-fw fa-tachometer"/>&nbsp;&nbsp;Dashboards
                   </Button>
                 </a>
                 &nbsp; &nbsp; &nbsp; &nbsp;
-                <a href="/plugins/devopsprodigy-kubegrafv2-app">
+                <a href="/plugins/devopsprodigy-kubegraf-app">
                   <Button variant="primary">
                     <i className="fa fa-fw fa-cog"/>&nbsp;&nbsp;Plugin config
                   </Button>

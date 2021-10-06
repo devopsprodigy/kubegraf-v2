@@ -6,6 +6,7 @@ export interface KubegrafDSOptions extends DataSourceJsonData {
   prometheus_name?: string;
   access_via_token?: boolean;
   refresh_pods_rate?: number | string;
+  cluster_url?: string;
 }
 
 export interface SecureJsonData {

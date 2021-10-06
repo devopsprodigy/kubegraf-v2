@@ -31,6 +31,10 @@ export const onAccessTokenChange = (options: Props['options'], onOptionsChange: 
       ...options,
       secureJsonData: {
           access_token: getValueFromEventItem(event)
+      },
+      jsonData: {
+          ...options.jsonData,
+          cluster_url: options.url
       }
   })
 };
@@ -66,7 +70,7 @@ export const TokenConfig = (props: Props) => {
               onChange={event =>
                 onOptionsChange({
                   ...options,
-                  jsonData: { ...options.jsonData, access_via_token: event!.currentTarget.checked },
+                  jsonData: { ...options.jsonData, access_via_token: event!.currentTarget.checked, cluster_url: options.url },
                 })
               }
             />

@@ -44,7 +44,7 @@ export class ClusterCard extends PureComponent<Props>{
                         <div className="card-section">
                             <div className="card-item">
                                 <div className="card-item-header">
-                                    <h2>{ this.cluster.name }  {this.cluster.uid}</h2>
+                                    <h2>{ this.cluster.name }</h2>
                                 </div>
                                 <hr/>
                                 <div className="row">

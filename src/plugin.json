@@ -1,7 +1,7 @@
 {
   "type": "app",
   "name": "DevOpsProdigy KubeGraf 2.0",
-  "id": "devopsprodigy-kubegrafv2-app",
+  "id": "devopsprodigy-kubegraf-app",
   "dependencies": {
     "grafanaDependency": ">=8.0.1",
     "grafanaVersion": "8.0",
@@ -55,21 +55,21 @@
     {
       "type" : "page",
       "name" : "Clusters",
-      "path" : "/a/devopsprodigy-kubegrafv2-app/?page=clusters-list",
+      "path" : "/a/devopsprodigy-kubegraf-app/?page=clusters-list",
       "addToNav" : true,
       "icon" : "list-ul",
       "role" : "Viewer"
     },{
       "type" : "page",
       "name" : "Config",
-      "path" : "/plugins/devopsprodigy-kubegrafv2-app",
+      "path" : "/plugins/devopsprodigy-kubegraf-app",
       "addToNav" : true,
       "icon" : "cog"
     },
     {
       "type" : "page",
       "name" : "Cluster Config",
-      "path" : "/a/devopsprodigy-kubegrafv2-app/?page=cluster-config",
+      "path" : "/a/devopsprodigy-kubegraf-app/?page=cluster-config",
       "addToNav" : false
     },
     {
@@ -104,7 +104,7 @@
     },
     {
       "type" : "datasource",
-      "name" : "DOP KubeGrafDS v2"
+      "name" : "DevOpsProdigy KubeGraf DS v2"
     }
   ]
 }

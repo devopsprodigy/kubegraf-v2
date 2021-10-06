@@ -16,25 +16,21 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
   }
 
   async testDatasource() {
-    let res = await this.getNamespaces().then(
-        (res) => {
-          console.log(res);
-        },
-        (error) => {
-          console.log(error);
-        }
-    );
-    return Promise.resolve(res);
+    const res = await this.getNamespaces();
+    if(res.status !== 200) {
+        return {status: 'error', message: res.data.message};
+    }else{
+        return {status: 'success', message: 'Datasource is working'};
+    }
   }
 
   getNamespaces(){
-    return this.__get('/api/v1/namespaces')
-        .then((result) => {
-          console.log(result);
-          return result.items;
+    return this.__get('/api/v1/namespaces').toPromise()
+        .then((result: any) => {
+            return result;
         })
         .catch((err) => {
-          console.error(err);
+            return err;
         })
   }
 
@@ -46,19 +42,9 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
     _url += url;
 
 
-
-    return getBackendSrv().datasourceRequest({
-      url: _url,
-      method: "GET"
-    }).then(
-        (response) => {
-          console.log(1);
-          return response.data;
-        },
-        (error) => {
-          console.log(2);
-          return error;
-        }
-    )
+    return getBackendSrv().fetch({
+        url: _url,
+        method: "GET"
+    });
   }
 }

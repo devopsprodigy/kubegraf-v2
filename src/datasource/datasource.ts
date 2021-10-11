@@ -1,6 +1,14 @@
-import {DataFrame, DataQueryRequest, DataQueryResponse, DataSourceApi, DataSourceInstanceSettings} from '@grafana/data';
+import {
+    AppEvents,
+    DataFrame,
+    DataQueryRequest,
+    DataQueryResponse,
+    DataSourceApi,
+    DataSourceInstanceSettings
+} from '@grafana/data';
 import { KubegrafDSOptions, KubegrafDSQuery } from '../types';
 import {getBackendSrv} from "@grafana/runtime";
+import appEvents from 'grafana/app/core/app_events';
 
 export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafDSOptions> {
 
@@ -33,6 +41,20 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
             return err;
         })
   }
+
+  getNodes(){
+      return this.__get('/api/v1/nodes').toPromise()
+          .then((res : any) => {
+              if(!res.data.items){
+                  const message = 'Nodes not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+
+              return res.data.items;
+          })
+  }
+
 
   __get(url : string) {
     let _url = '' + this.instanceSettings.url;

@@ -21,7 +21,24 @@ export interface PromInstance {
   isDefault: boolean | undefined;
 }
 
+export enum OrgRole {
+  ADMIN = 'Admin',
+  EDITOR = 'Editor',
+  VIEWER = 'Viewer',
+}
+
+export interface User {
+  email: string;
+  id: number;
+  isGrafanaAdmin: boolean;
+  isSignedIn: boolean;
+  orgId: number;
+  orgName: string;
+  orgRole: OrgRole;
+}
+
 export interface K8sCluster {
+  id: number;
   uid: string;
   name: string;
 }

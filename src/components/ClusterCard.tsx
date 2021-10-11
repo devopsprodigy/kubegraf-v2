@@ -23,6 +23,10 @@ export class ClusterCard extends PureComponent<Props>{
         return `/datasources/edit/${this.cluster.uid}`;
     }
 
+    generateNodesOverviewLink = () => {
+        return `/a/devopsprodigy-kubegraf-app/?page=nodes-overview&clusterId=${this.cluster.id}`;
+    }
+
     showDeleteModal = () => {
         this.setState({showDeleteModal: true});
     }
@@ -61,7 +65,7 @@ export class ClusterCard extends PureComponent<Props>{
                                             </Button>
                                         </a>
                                         &nbsp;
-                                        <a href="#">
+                                        <a href={this.generateNodesOverviewLink()}>
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-eye" />&nbsp;&nbsp;Nodes Overview
                                             </Button>

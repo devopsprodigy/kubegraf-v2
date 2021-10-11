@@ -97,6 +97,7 @@ export class ClustersListPage extends PureComponent{
             return item.type === DS_ID;
           }).map((item : any) => {
             return {
+              id: item.id,
               uid: item.uid,
               name: item.name
             }

@@ -26,6 +26,9 @@ export class ClusterCard extends PureComponent<Props>{
     generateNodesOverviewLink = () => {
         return `/a/devopsprodigy-kubegraf-app/?page=nodes-overview&clusterId=${this.cluster.id}`;
     }
+    generateApplicationsOverviewLink = () => {
+        return `/a/devopsprodigy-kubegraf-app/?page=applications-overview&clusterId=${this.cluster.id}`;
+    }
 
     showDeleteModal = () => {
         this.setState({showDeleteModal: true});
@@ -59,7 +62,7 @@ export class ClusterCard extends PureComponent<Props>{
                                             </Button>
                                         </a>
                                         &nbsp;
-                                        <a href="#">
+                                        <a href={this.generateApplicationsOverviewLink()}>
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-eye" />&nbsp;&nbsp;Applications Overview
                                             </Button>

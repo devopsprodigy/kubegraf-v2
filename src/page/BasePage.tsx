@@ -1,4 +1,4 @@
-import {PureComponent} from "react";
+import {PureComponent, SyntheticEvent} from "react";
 import {getBackendSrv, getDataSourceSrv} from "@grafana/runtime";
 import {KubeGrafDatasource} from "../datasource/datasource";
 import store from "../common/store";
@@ -6,6 +6,8 @@ import {Node} from "../models/Node";
 import {DS_ID} from "../constants";
 import {hasRole} from "../common/utils";
 import {OrgRole} from "../types";
+import {SelectableValue} from "@grafana/data";
+import {Namespace} from "../models/Namespace";
 
 interface Props{
     cluster_id: string
@@ -23,6 +25,7 @@ export class BasePage extends PureComponent<Props>{
 
     nodesMap: Node[] = [];
     nodesError: Boolean | Error = false;
+    namespacesMap: Namespace[] = [];
 
 
     constructor(props: any) {
@@ -32,7 +35,6 @@ export class BasePage extends PureComponent<Props>{
         try{
             this.isAdmin = hasRole(OrgRole.ADMIN);
         }catch (err){
-            console.error(err);
             this.isAdmin = false;
         }
     }
@@ -53,16 +55,28 @@ export class BasePage extends PureComponent<Props>{
         return clusters;
     }
 
+    getValueFromEventItem(eventItem : SyntheticEvent<HTMLInputElement> | SelectableValue<string>){
+        if (!eventItem) {
+            return '';
+        }
+
+        if (eventItem.hasOwnProperty('currentTarget')) {
+            return eventItem.currentTarget.value;
+        }
+
+        return (eventItem as SelectableValue<string>).value;
+    }
+
     generateCLusterStatusLink(){
-        return `/a/devopsprodigy-kubegraf-app/?page=cluster-status&clusterId=${this.cluster?.instanceSettings.id}`;
+        return `/a/devopsprodigy-kubegraf-app/?page=cluster-status&clusterId=${this.props.cluster_id}`;
     }
 
     generateApplicationsOverviewLink(){
-        return `/a/devopsprodigy-kubegraf-app/?page=applications-overview&clusterId=${this.cluster?.instanceSettings.id}`;
+        return `/a/devopsprodigy-kubegraf-app/?page=applications-overview&clusterId=${this.props.cluster_id}`;
     }
 
     generateNodesOverviewLink = () => {
-        return `/a/devopsprodigy-kubegraf-app/?page=nodes-overview&clusterId=${this.cluster?.instanceSettings.id}`;
+        return `/a/devopsprodigy-kubegraf-app/?page=nodes-overview&clusterId=${this.props.cluster_id}`;
     }
 
     generateEditLink = () => {
@@ -87,6 +101,28 @@ export class BasePage extends PureComponent<Props>{
             .then(() => {
                 console.log(123);
             })
+    }
+
+    getNamespacesMap = () => {
+        return this.cluster?.getNamespaces().then((namespaces: any) => {
+            let namespaceStore = [];
+            let getStore = store.getObject('namespaceStore');
+            if (getStore) {
+                namespaceStore = getStore;
+            }
+            namespaces.forEach((namespace: any) => {
+                let ns = new Namespace(namespace);
+                this.namespacesMap.push(ns);
+                let index = namespaceStore.findIndex((item) => item.name === ns.name);
+
+                if (index > -1) {
+                    ns.open = namespaceStore[index].open;
+                } else {
+                    namespaceStore.push({ name: ns.name, open: ns.open });
+                }
+            });
+            store.setObject('namespaceStore', namespaceStore);
+        });
     }
 
     getNodes(){

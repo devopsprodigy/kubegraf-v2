@@ -79,6 +79,12 @@
       "addToNam" : false
     },
     {
+      "type"  : "page",
+      "name"  : "Applications' Overview",
+      "path"  : "/a/devopsprodigy-kubegraf-app/?page=applications-overview",
+      "addToNam" : false
+    },
+    {
       "type"      : "dashboard",
       "name"      : "DOP Node's Dashboard",
       "path"      : "dashboards/node.json",

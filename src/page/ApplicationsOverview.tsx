@@ -1,12 +1,11 @@
 import React, {SyntheticEvent} from "react";
 import {BasePage} from "./BasePage";
-import {Button, InlineFormLabel, LegacyForms, Tab, TabsBar} from "@grafana/ui";
+import {Button, InlineFormLabel, Tab, TabsBar, LegacyForms} from "@grafana/ui";
 import {SelectableValue} from "@grafana/data";
 
 const {Select} = LegacyForms;
 
-
-export class NodesOverviewPage extends BasePage{
+export class ApplicationsOverview extends BasePage{
 
     state = {
         pageReady: false,
@@ -25,7 +24,7 @@ export class NodesOverviewPage extends BasePage{
                 currentClusterId: this.cluster?.instanceSettings.id,
                 pageReady: true
             });
-            this.getNodesMap().then(() => {
+            this.getNamespacesMap().then(() => {
 
             })
         });
@@ -37,15 +36,12 @@ export class NodesOverviewPage extends BasePage{
                     clusters: res
                 })
             });
-
     }
 
     goToTheAnotherCluster = () => (eventItem: SyntheticEvent<HTMLInputElement> | SelectableValue<string>) => {
         const value = this.getValueFromEventItem(eventItem);
-        window.location.href = `/a/devopsprodigy-kubegraf-app/?page=nodes-overview&clusterId=${value}`;
+        window.location.href = `/a/devopsprodigy-kubegraf-app/?page=applications-overview&clusterId=${value}`;
     }
-
-
 
     render() {
 
@@ -61,8 +57,8 @@ export class NodesOverviewPage extends BasePage{
                             <div className='col-md-6'>
                                 <TabsBar hideBorder={true}>
                                     <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''} onChangeTab={() => {}}/>
-                                    <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} css={''}  onChangeTab={() => {}}/>
-                                    <Tab href={this.generateNodesOverviewLink()} label={'Nodes Overview'} active={true} css={''} onChangeTab={() => {}}/>
+                                    <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} active={true} css={''}  onChangeTab={() => {}}/>
+                                    <Tab href={this.generateNodesOverviewLink()} label={'Nodes Overview'}  css={''} onChangeTab={() => {}}/>
                                 </TabsBar>
                             </div>
                             {this.isAdmin && (
@@ -120,16 +116,15 @@ export class NodesOverviewPage extends BasePage{
                         </div>
 
                         {this.state.pageReady && (
-                        <>
-                            <div className='overview-panel'>
-                                <h1>Overview: {this.cluster?.instanceSettings.name}. Nodes</h1>
-                            </div>
-                        </>
+                            <>
+                                <div className='overview-panel'>
+                                    <h1>Overview: {this.cluster?.instanceSettings.name}. Applications</h1>
+                                </div>
+                            </>
                         )}
 
                     </div>
                 </div>
-
             </>
         );
     }

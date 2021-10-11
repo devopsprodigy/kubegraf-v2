@@ -34,12 +34,21 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
 
   getNamespaces(){
     return this.__get('/api/v1/namespaces').toPromise()
-        .then((result: any) => {
-            return result;
+        .then((res : any) => {
+            if(!res.data.items){
+                const message = 'Namespaces not received';
+                appEvents.emit(AppEvents.alertError, [message]);
+                return new Error(message);
+            }
+
+            return res.data.items;
         })
-        .catch((err) => {
-            return err;
-        })
+        .catch(e => {
+            console.error(e);
+            const message = 'Namespaces not received';
+            appEvents.emit(AppEvents.alertError, [message]);
+            return new Error(message);
+        });
   }
 
   getNodes(){
@@ -53,6 +62,12 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
 
               return res.data.items;
           })
+          .catch(e => {
+              console.error(e);
+              const message = 'Nodes not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          });
   }
 
 

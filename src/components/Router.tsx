@@ -4,6 +4,7 @@ import React from 'react';
 import { getLocationSrv } from '@grafana/runtime';
 import { ClustersListPage } from '../page/ClustersList';
 import {NodesOverviewPage} from "../page/NodesOverview";
+import {ApplicationsOverview} from "../page/ApplicationsOverview";
 
 type Page = {
   id: string;
@@ -19,6 +20,9 @@ const pages: Page[] = [
   },
   {
     id: 'nodes-overview'
+  },
+  {
+    id: 'applications-overview'
   }
 ];
 
@@ -37,6 +41,8 @@ const getPage = (query: any) => {
       return <ClustersListPage />;
     case 'nodes-overview':
       return <NodesOverviewPage cluster_id={query.clusterId}/>;
+    case 'applications-overview':
+      return <ApplicationsOverview cluster_id={query.clusterId} />
     default:
       getLocationSrv().update({
         path: '/plugins/devopsprodigy-kubegraf-app',

@@ -24,7 +24,14 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
   }
 
   async testDatasource() {
-    const res = await this.getNamespaces();
+    const res = await this.__get('/api/v1/namespaces').toPromise()
+        .then((res: any) => {
+            return res;
+        })
+        .catch((err: any) =>{
+            return err;
+        })
+
     if(res.status !== 200) {
         return {status: 'error', message: res.data.message};
     }else{

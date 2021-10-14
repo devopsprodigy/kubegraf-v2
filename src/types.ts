@@ -35,6 +35,7 @@ export interface User {
   orgId: number;
   orgName: string;
   orgRole: OrgRole;
+  lightTheme: boolean;
 }
 
 export interface K8sCluster {

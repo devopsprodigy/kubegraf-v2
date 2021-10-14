@@ -1,11 +1,16 @@
 import React, {SyntheticEvent} from "react";
 import {BasePage} from "./BasePage";
-import {Button, InlineFormLabel, Tab, TabsBar, LegacyForms} from "@grafana/ui";
+import {Button, InlineFormLabel, Tab, TabsBar, LegacyForms, ToolbarButtonRow, ToolbarButton} from "@grafana/ui";
 import {SelectableValue} from "@grafana/data";
+import {cx} from "@emotion/css";
+
+
 
 const {Select} = LegacyForms;
 
+
 export class ApplicationsOverview extends BasePage{
+
 
     state = {
         pageReady: false,
@@ -25,8 +30,8 @@ export class ApplicationsOverview extends BasePage{
                 pageReady: true
             });
             this.getNamespacesMap().then(() => {
-
             })
+
         });
 
         this.getAvailableClusters()
@@ -48,7 +53,6 @@ export class ApplicationsOverview extends BasePage{
         const hintBorder = {
             marginTop: 0
         }
-
         return (
             <>
                 <div>
@@ -56,9 +60,9 @@ export class ApplicationsOverview extends BasePage{
                         <div className='row'>
                             <div className='col-md-6'>
                                 <TabsBar hideBorder={true}>
-                                    <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''} onChangeTab={() => {}}/>
-                                    <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} active={true} css={''}  onChangeTab={() => {}}/>
-                                    <Tab href={this.generateNodesOverviewLink()} label={'Nodes Overview'}  css={''} onChangeTab={() => {}}/>
+                                    <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''}  onChangeTab={() => {}}/>
+                                    <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} css={''} active={true}  onChangeTab={() => {}}/>
+                                    <Tab href={this.generateNodesOverviewLink()} label={'Nodes Overview'} css={''} onChangeTab={() => {}}/>
                                 </TabsBar>
                             </div>
                             {this.isAdmin && (
@@ -117,8 +121,28 @@ export class ApplicationsOverview extends BasePage{
 
                         {this.state.pageReady && (
                             <>
-                                <div className='overview-panel'>
-                                    <h1>Overview: {this.cluster?.instanceSettings.name}. Applications</h1>
+                                <div className={cx(this.styles.overviewPanel)}>
+
+                                    <div className={cx(this.styles.header)}>
+                                        <div className={cx(this.styles.title)}>
+                                            <span className={cx(this.styles.chevron, 'active')}></span>
+                                            <h1>Overview: {this.cluster?.instanceSettings.name}. Applications</h1>
+                                        </div>
+                                        <div className={cx(this.styles.overviewPanelBtn)}>
+                                            <span className={cx(this.styles.namespaceCounter, this.styles.overviewSpan)}>
+                                                <span className={'active'}>10</span> / 20
+                                            </span>
+                                            <span className={cx(this.styles.verticalLine, this.styles.overviewSpanLast)}></span>
+
+                                            <ToolbarButtonRow>
+                                                <ToolbarButton variant={'primary'}>Show all</ToolbarButton>
+                                                <ToolbarButton variant={'primary'} icon={'question-circle'} tooltip={'Use Ctrl+Click or ⌘+Click to select only one Namespace'}>Hide all</ToolbarButton>
+                                            </ToolbarButtonRow>
+
+                                        </div>
+                                    </div>
+
+
                                 </div>
                             </>
                         )}

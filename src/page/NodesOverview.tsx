@@ -60,9 +60,9 @@ export class NodesOverviewPage extends BasePage{
                         <div className='row'>
                             <div className='col-md-6'>
                                 <TabsBar hideBorder={true}>
-                                    <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''} onChangeTab={() => {}}/>
+                                    <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''}  onChangeTab={() => {}}/>
                                     <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} css={''}  onChangeTab={() => {}}/>
-                                    <Tab href={this.generateNodesOverviewLink()} label={'Nodes Overview'} active={true} css={''} onChangeTab={() => {}}/>
+                                    <Tab href={this.generateNodesOverviewLink()} label={'Nodes Overview'} active={true} css={''}  onChangeTab={() => {}}/>
                                 </TabsBar>
                             </div>
                             {this.isAdmin && (

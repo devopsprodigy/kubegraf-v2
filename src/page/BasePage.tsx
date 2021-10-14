@@ -4,16 +4,19 @@ import {KubeGrafDatasource} from "../datasource/datasource";
 import store from "../common/store";
 import {Node} from "../models/Node";
 import {DS_ID} from "../constants";
-import {hasRole} from "../common/utils";
+import {hasRole, isLight} from "../common/utils";
 import {OrgRole} from "../types";
 import {SelectableValue} from "@grafana/data";
 import {Namespace} from "../models/Namespace";
+import {Styles} from "../common/styles";
 
 interface Props{
     cluster_id: string
 }
 
 export class BasePage extends PureComponent<Props>{
+
+    styles: any;
 
     pageReady : boolean = false;
 
@@ -30,6 +33,8 @@ export class BasePage extends PureComponent<Props>{
 
     constructor(props: any) {
         super(props);
+        this.styles = Styles(isLight());
+        console.log(this.styles);
         this.cluster_id = props.cluster_id;
 
         try{
@@ -104,8 +109,11 @@ export class BasePage extends PureComponent<Props>{
     }
 
     getNamespacesMap = () => {
-        return this.cluster?.getNamespaces().then((namespaces: any) => {
-            let namespaceStore = [];
+        if(this.cluster === undefined)
+            return Promise.reject(false);
+
+        return this.cluster.getNamespaces().then((namespaces: any) => {
+            let namespaceStore : any = [];
             let getStore = store.getObject('namespaceStore');
             if (getStore) {
                 namespaceStore = getStore;
@@ -113,7 +121,7 @@ export class BasePage extends PureComponent<Props>{
             namespaces.forEach((namespace: any) => {
                 let ns = new Namespace(namespace);
                 this.namespacesMap.push(ns);
-                let index = namespaceStore.findIndex((item) => item.name === ns.name);
+                let index = namespaceStore.findIndex((item: any) => item.name === ns.name);
 
                 if (index > -1) {
                     ns.open = namespaceStore[index].open;

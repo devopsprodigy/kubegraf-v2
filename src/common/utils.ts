@@ -19,3 +19,8 @@ export function hasRole(role: OrgRole){
         }
     }
 }
+
+export function isLight(){
+    const user: User = config.bootData.user;
+    return user.lightTheme;
+}

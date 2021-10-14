@@ -3,6 +3,9 @@ import {BasePage} from "./BasePage";
 import {Button, InlineFormLabel, Tab, TabsBar, LegacyForms, ToolbarButtonRow, ToolbarButton} from "@grafana/ui";
 import {SelectableValue} from "@grafana/data";
 import {cx} from "@emotion/css";
+import {Namespace} from "../models/Namespace";
+import {Component} from "../models/Component";
+import {ClusterComponent} from "../components/ClusterComponent";
 
 
 
@@ -17,6 +20,8 @@ export class ApplicationsOverview extends BasePage{
         clusters: [],
         currentClusterName : '',
         currentClusterId : '',
+
+        clusterComponents: []
     }
 
     constructor(props: any) {
@@ -26,13 +31,19 @@ export class ApplicationsOverview extends BasePage{
             this.setState({
                 ...this.state,
                 currentClusterName: this.cluster?.instanceSettings.name,
-                currentClusterId: this.cluster?.instanceSettings.id,
-                pageReady: true
+                currentClusterId: this.cluster?.instanceSettings.id
             });
             this.getNamespacesMap().then(() => {
-            })
+                this.setState({
+                    ...this.state,
+                    pageReady: true
+                })
+            });
+
+            this.getClusterComponents();
 
         });
+
 
         this.getAvailableClusters()
             .then((res) => {
@@ -41,6 +52,33 @@ export class ApplicationsOverview extends BasePage{
                     clusters: res
                 })
             });
+    }
+
+    getClusterComponents(){
+        console.log('get components');
+        this.cluster?.getComponents().then((components: any) => {
+            if(components instanceof Array){
+                this.componentsError = false;
+                this.storeComponents = components.map((component: any) => new Component(component));
+            }else {
+                this.componentsError = components;
+            }
+
+            this.setState({
+                ...this.state,
+                clusterComponents: this.storeComponents
+            });
+
+            setTimeout(() => this.getClusterComponents(), this.refreshRate);
+        });
+    }
+
+    getNamespacesCount(){
+        return this.namespacesMap.length;
+    }
+
+    getActiveNamespacesCount(){
+        return this.namespacesMap.filter((item : Namespace) => item.open).length;
     }
 
     goToTheAnotherCluster = () => (eventItem: SyntheticEvent<HTMLInputElement> | SelectableValue<string>) => {
@@ -146,7 +184,7 @@ export class ApplicationsOverview extends BasePage{
                                         </div>
                                         <div className={cx(this.styles.overviewPanelBtn)}>
                                             <span className={cx(this.styles.namespaceCounter, this.styles.overviewSpan)}>
-                                                <span className={'active'}>10</span> / 20
+                                                <span className={'active'}>{this.getActiveNamespacesCount()}</span> / {this.getNamespacesCount()}
                                             </span>
                                             <span className={cx(this.styles.verticalLine, this.styles.overviewSpanLast)}></span>
 
@@ -158,7 +196,14 @@ export class ApplicationsOverview extends BasePage{
                                         </div>
                                     </div>
 
-
+                                    <div className={cx(this.styles.overviewPanelBody)}>
+                                        <div className={cx(this.styles.clusterComponents)}>
+                                            <h2>Components</h2>
+                                            {this.state.clusterComponents.map((component: Component) => {
+                                                return (<ClusterComponent component={component} />)
+                                            })}
+                                        </div>
+                                    </div>
                                 </div>
                             </>
                         )}

@@ -13,6 +13,19 @@ export const Styles = (isLight: boolean) => {
             background-color: ${isLight ? "#e4e8ec" : "#2d2d30"};
         `;
 
+    const overviewPanelBody = css `
+        display: flex;
+        justify-content: space-between;
+        margin-top: 24px;
+        
+        h2 {
+            font-size: 18px;
+            font-weight: normal;
+            margin-bottom: 20px;
+            line-height: 18px;
+        }
+    `;
+
     const chevron = css `
             display: block;
             width: 14px;
@@ -84,9 +97,45 @@ export const Styles = (isLight: boolean) => {
         margin-bottom: 0;
     `;
 
+    const clusterComponents = css `
+        display: flex;
+        flex-direction: column;
+        font-size: 14px;
+        margin-right: 20px;
+        
+        .component{
+            margin-bottom: 8px;
+            display: flex; 
+        }    
+    `;
+
+    const statusIndicator = css `
+        display: block;
+        min-width: 6px;
+        width: 6px;
+        height: 6px;
+        border-radius: 100%;
+        margin-top: 8px;
+        margin-right: 8px;   
+        
+        &.red, &.error {
+            background-color: #d34d36;
+        }
+        &.green, &.success {
+            background-color: #83df57;
+        }
+        &.yellow, &.warning {
+            background-color: #fcff00;
+        }
+        &.terminating, &.succeeded {
+            background-color: #555555;
+        } 
+    `;
+
 
     return {
         overviewPanel: overviewPanel,
+        overviewPanelBody: overviewPanelBody,
         chevron: chevron,
 
         header: header,
@@ -99,6 +148,10 @@ export const Styles = (isLight: boolean) => {
 
         overviewSpan: overviewSpan,
         overviewSpanLast: overviewSpanLast,
-        gfInline: gfInline
+        gfInline: gfInline,
+
+        clusterComponents: clusterComponents,
+
+        statusIndicator: statusIndicator
     }
 }

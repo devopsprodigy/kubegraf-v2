@@ -9,6 +9,7 @@ import {OrgRole} from "../types";
 import {SelectableValue} from "@grafana/data";
 import {Namespace} from "../models/Namespace";
 import {Styles} from "../common/styles";
+import {Component} from "../models/Component";
 
 interface Props{
     cluster_id: string
@@ -23,13 +24,15 @@ export class BasePage extends PureComponent<Props>{
     cluster_id : string;
     cluster: KubeGrafDatasource | undefined = undefined;
     promDs: any;
+    refreshRate: number;
 
     isAdmin: boolean;
 
     nodesMap: Node[] = [];
     nodesError: Boolean | Error = false;
     namespacesMap: Namespace[] = [];
-
+    storeComponents: Component[] = [];
+    componentsError: Boolean | Error = false;
 
     constructor(props: any) {
         super(props);
@@ -96,6 +99,7 @@ export class BasePage extends PureComponent<Props>{
 
      getCluster = async () => {
         this.cluster = ( await getDataSourceSrv().get(this.cluster_id).catch(e => undefined) ) as KubeGrafDatasource | undefined;
+        this.refreshRate = this.cluster?.instanceSettings.jsonData.refresh_pods_rate * 1000;
     }
 
     getNodesMap = (withoutPods: boolean = false) => {
@@ -132,6 +136,8 @@ export class BasePage extends PureComponent<Props>{
             store.setObject('namespaceStore', namespaceStore);
         });
     }
+
+
 
     getNodes(){
         return this.cluster?.getNodes().then((nodes: any) => {

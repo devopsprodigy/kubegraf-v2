@@ -58,6 +58,24 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
         });
   }
 
+  getComponents(){
+      return this.__get('/api/v1/componentstatuses').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = `Component statuses not received`;
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+              return res.data.items;
+          })
+          .catch(e => {
+              console.error(e);
+              const message = `Component statuses not received`;
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
   getNodes(){
       return this.__get('/api/v1/nodes').toPromise()
           .then((res : any) => {

@@ -58,7 +58,7 @@ export class ApplicationsOverview extends BasePage{
                 <div>
                     <div className='page-header'>
                         <div className='row'>
-                            <div className='col-md-6'>
+                            <div className='col-md-5'>
                                 <TabsBar hideBorder={true}>
                                     <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''}  onChangeTab={() => {}}/>
                                     <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} css={''} active={true}  onChangeTab={() => {}}/>
@@ -66,20 +66,33 @@ export class ApplicationsOverview extends BasePage{
                                 </TabsBar>
                             </div>
                             {this.isAdmin && (
-                                <div className='col-md-6'>
+                                <div className='col-md-7'>
                                     <div className='pull-right'>
+                                        <div className={cx('gf-form-group', this.styles.gfInline)}>
+                                            <div className='gf-form-inline'>
+                                                <div className='gf-form'>
+                                                    <InlineFormLabel width={6}>Select cluster</InlineFormLabel>
+                                                    <Select options={this.state.clusters}
+                                                            value={this.state.clusters.find((o: any) => o.value === this.state.currentClusterId)}
+                                                            width={8}
+                                                            onChange={this.goToTheAnotherCluster()} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        &nbsp;
+                                        &nbsp;
                                         <a href="/plugins/devopsprodigy-kubegraf-app?page=dashboards">
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-tachometer"/>&nbsp;&nbsp;Dashboards
                                             </Button>
                                         </a>
-                                        &nbsp; &nbsp; &nbsp; &nbsp;
+                                        &nbsp; &nbsp;
                                         <a href={this.generateEditLink()}>
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-cog" />&nbsp;&nbsp;Edit
                                             </Button>
                                         </a>
-                                        &nbsp; &nbsp; &nbsp; &nbsp;
+                                        &nbsp; &nbsp;
                                         <a href="/plugins/devopsprodigy-kubegraf-app">
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-cog"/>&nbsp;&nbsp;Plugin config
@@ -91,8 +104,21 @@ export class ApplicationsOverview extends BasePage{
                             )}
 
                             {!this.isAdmin && (
-                                <div className='col-md-6'>
+                                <div className='col-md-7'>
                                     <div className='pull-right'>
+                                        <div className={cx('gf-form-group', this.styles.gfInline)}>
+                                            <div className='gf-form-inline'>
+                                                <div className='gf-form'>
+                                                    <InlineFormLabel width={6}>Select cluster</InlineFormLabel>
+                                                    <Select options={this.state.clusters}
+                                                            value={this.state.clusters.find((o: any) => o.value === this.state.currentClusterId)}
+                                                            width={8}
+                                                            onChange={this.goToTheAnotherCluster()} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        &nbsp;
+                                        &nbsp;
                                         <a href="/plugins/devopsprodigy-kubegraf-app">
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-cog"/>&nbsp;&nbsp;Plugin info
@@ -107,17 +133,7 @@ export class ApplicationsOverview extends BasePage{
 
                         <hr style={hintBorder} />
 
-                        <div className='gf-form-group'>
-                            <div className='gf-form-inline'>
-                                <div className='gf-form'>
-                                    <InlineFormLabel width={10}>Select cluster</InlineFormLabel>
-                                    <Select options={this.state.clusters}
-                                            value={this.state.clusters.find((o: any) => o.value === this.state.currentClusterId)}
-                                            width={10}
-                                            onChange={this.goToTheAnotherCluster()} />
-                                </div>
-                            </div>
-                        </div>
+
 
                         {this.state.pageReady && (
                             <>

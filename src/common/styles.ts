@@ -79,6 +79,11 @@ export const Styles = (isLight: boolean) => {
         margin-right: 20px!important;    
     `;
 
+    const gfInline = css `
+        display: inline-block;
+        margin-bottom: 0;
+    `;
+
 
     return {
         overviewPanel: overviewPanel,
@@ -93,6 +98,7 @@ export const Styles = (isLight: boolean) => {
         verticalLine: verticalLine,
 
         overviewSpan: overviewSpan,
-        overviewSpanLast: overviewSpanLast
+        overviewSpanLast: overviewSpanLast,
+        gfInline: gfInline
     }
 }

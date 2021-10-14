@@ -2,6 +2,7 @@ import React, {SyntheticEvent} from "react";
 import {BasePage} from "./BasePage";
 import {Button, InlineFormLabel, LegacyForms, Tab, TabsBar} from "@grafana/ui";
 import {SelectableValue} from "@grafana/data";
+import {cx} from "@emotion/css";
 
 const {Select} = LegacyForms;
 
@@ -58,7 +59,7 @@ export class NodesOverviewPage extends BasePage{
                 <div>
                     <div className='page-header'>
                         <div className='row'>
-                            <div className='col-md-6'>
+                            <div className='col-md-5'>
                                 <TabsBar hideBorder={true}>
                                     <Tab href={this.generateCLusterStatusLink()} label={'Cluster status'} css={''}  onChangeTab={() => {}}/>
                                     <Tab href={this.generateApplicationsOverviewLink()} label={'Applications Overview'} css={''}  onChangeTab={() => {}}/>
@@ -66,20 +67,33 @@ export class NodesOverviewPage extends BasePage{
                                 </TabsBar>
                             </div>
                             {this.isAdmin && (
-                                <div className='col-md-6'>
+                                <div className='col-md-7'>
                                     <div className='pull-right'>
+                                        <div className={cx('gf-form-group', this.styles.gfInline)}>
+                                            <div className='gf-form-inline'>
+                                                <div className='gf-form'>
+                                                    <InlineFormLabel width={6}>Select cluster</InlineFormLabel>
+                                                    <Select options={this.state.clusters}
+                                                            value={this.state.clusters.find((o: any) => o.value === this.state.currentClusterId)}
+                                                            width={8}
+                                                            onChange={this.goToTheAnotherCluster()} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        &nbsp;
+                                        &nbsp;
                                         <a href="/plugins/devopsprodigy-kubegraf-app?page=dashboards">
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-tachometer"/>&nbsp;&nbsp;Dashboards
                                             </Button>
                                         </a>
-                                        &nbsp; &nbsp; &nbsp; &nbsp;
+                                        &nbsp; &nbsp;
                                         <a href={this.generateEditLink()}>
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-cog" />&nbsp;&nbsp;Edit
                                             </Button>
                                         </a>
-                                        &nbsp; &nbsp; &nbsp; &nbsp;
+                                        &nbsp; &nbsp;
                                         <a href="/plugins/devopsprodigy-kubegraf-app">
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-cog"/>&nbsp;&nbsp;Plugin config
@@ -91,8 +105,21 @@ export class NodesOverviewPage extends BasePage{
                             )}
 
                             {!this.isAdmin && (
-                                <div className='col-md-6'>
+                                <div className='col-md-7'>
                                     <div className='pull-right'>
+                                        <div className={cx('gf-form-group', this.styles.gfInline)}>
+                                            <div className='gf-form-inline'>
+                                                <div className='gf-form'>
+                                                    <InlineFormLabel width={6}>Select cluster</InlineFormLabel>
+                                                    <Select options={this.state.clusters}
+                                                            value={this.state.clusters.find((o: any) => o.value === this.state.currentClusterId)}
+                                                            width={8}
+                                                            onChange={this.goToTheAnotherCluster()} />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        &nbsp;
+                                        &nbsp;
                                         <a href="/plugins/devopsprodigy-kubegraf-app">
                                             <Button variant="primary">
                                                 <i className="fa fa-fw fa-cog"/>&nbsp;&nbsp;Plugin info

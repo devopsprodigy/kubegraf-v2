@@ -1,16 +1,28 @@
 import React, {SyntheticEvent} from "react";
 import {BasePage} from "./BasePage";
-import {Button, InlineFormLabel, Tab, TabsBar, LegacyForms, ToolbarButtonRow, ToolbarButton} from "@grafana/ui";
+import {
+    Button,
+    InlineFormLabel,
+    Tab,
+    TabsBar,
+    LegacyForms,
+    ToolbarButtonRow,
+    ToolbarButton,
+} from "@grafana/ui";
 import {SelectableValue} from "@grafana/data";
 import {cx} from "@emotion/css";
 import {Namespace} from "../models/Namespace";
 import {Component} from "../models/Component";
 import {ClusterComponent} from "../components/ClusterComponent";
+import store from "../common/store";
 
 
 
 const {Select} = LegacyForms;
 
+const startPanelsMap = {
+    "__overview" : true
+}
 
 export class ApplicationsOverview extends BasePage{
 
@@ -21,12 +33,13 @@ export class ApplicationsOverview extends BasePage{
         currentClusterName : '',
         currentClusterId : '',
 
-        clusterComponents: []
+        clusterComponents: [],
+        namespacesMap: [],
+        openPanels: new Map<string,boolean>(Object.entries(startPanelsMap))
     }
 
     constructor(props: any) {
         super(props);
-
         this.prepareDs().then(() => {
             this.setState({
                 ...this.state,
@@ -55,7 +68,6 @@ export class ApplicationsOverview extends BasePage{
     }
 
     getClusterComponents(){
-        console.log('get components');
         this.cluster?.getComponents().then((components: any) => {
             if(components instanceof Array){
                 this.componentsError = false;
@@ -74,16 +86,98 @@ export class ApplicationsOverview extends BasePage{
     }
 
     getNamespacesCount(){
-        return this.namespacesMap.length;
+        return this.state.namespacesMap.length;
     }
 
     getActiveNamespacesCount(){
-        return this.namespacesMap.filter((item : Namespace) => item.open).length;
+        return this.state.namespacesMap.filter((item : Namespace) => item.open).length;
     }
 
     goToTheAnotherCluster = () => (eventItem: SyntheticEvent<HTMLInputElement> | SelectableValue<string>) => {
         const value = this.getValueFromEventItem(eventItem);
         window.location.href = `/a/devopsprodigy-kubegraf-app/?page=applications-overview&clusterId=${value}`;
+    }
+
+    showAll = () => {
+        this.toggleNamespaces(true);
+    }
+
+    hideAll = () => {
+        this.toggleNamespaces(false);
+    }
+
+    namespaceClickHandler(e: any, namespace: Namespace){
+        if(e.ctrlKey || e.metaKey){
+            if(namespace.open){
+                e.preventDefault();
+            }
+            this.toggleNamespaces(namespace);
+        }else{
+            this.toggleOneNamespace(namespace);
+        }
+    }
+
+    toggleNamespaces(namespace: boolean | Namespace){
+        store.delete('namespaceStore');
+        let namespaceStore : any = [];
+        this.namespacesMap.map((ns: Namespace) => {
+            ns.open = namespace === true || namespace === false ? namespace : namespace.name === ns.name;
+            namespaceStore.push({name: ns.name, open: ns.open});
+        });
+        this.refreshNamespacesMapView();
+        store.setObject('namespaceStore', namespaceStore);
+    }
+
+    toggleOneNamespace(namespace: Namespace){
+        namespace.toggle();
+        this.refreshNamespacesMapView();
+    }
+
+    private refreshNamespacesMapView(){
+        this.setState({
+            ...this.state,
+            namespacesMap: []
+        }, () => {
+            this.setState({
+                ...this.state,
+                namespacesMap: this.namespacesMap
+            })
+        });
+    }
+
+    isPanelOpenClass(name: string){
+        if(
+            this.state.openPanels.get(name) === undefined || this.state.openPanels.get(name) === true
+        ){
+            return 'active';
+        }else{
+            return 'disable';
+        }
+    }
+
+    isPanelOpen(name: string){
+        return (this.state.openPanels.get(name) === undefined || this.state.openPanels.get(name) === true);
+    }
+
+    togglePanel = (name: string) => (e : any) =>{
+        let panels = this.state.openPanels;
+        if(
+            panels.get(name) === undefined
+            ||
+            panels.get(name) === true
+        ){
+            panels.set(name, false);
+        }else{
+            panels.set(name, true);
+        }
+        this.setState({
+            ...this.state,
+            openPanels: new Map<string, boolean>(Object.entries({foo: false}))
+        }, () => this.setState({
+            ...this.state,
+            openPanels: panels
+        }))
+        console.log(this.state);
     }
 
     render() {
@@ -179,7 +273,7 @@ export class ApplicationsOverview extends BasePage{
 
                                     <div className={cx(this.styles.header)}>
                                         <div className={cx(this.styles.title)}>
-                                            <span className={cx(this.styles.chevron, 'active')}></span>
+                                            <span onClick={this.togglePanel("__overview")} className={cx(this.styles.chevron, this.isPanelOpenClass('__overview'))}></span>
                                             <h1>Overview: {this.cluster?.instanceSettings.name}. Applications</h1>
                                         </div>
                                         <div className={cx(this.styles.overviewPanelBtn)}>
@@ -189,21 +283,37 @@ export class ApplicationsOverview extends BasePage{
                                             <span className={cx(this.styles.verticalLine, this.styles.overviewSpanLast)}></span>
 
                                             <ToolbarButtonRow>
-                                                <ToolbarButton variant={'primary'}>Show all</ToolbarButton>
-                                                <ToolbarButton variant={'primary'} icon={'question-circle'} tooltip={'Use Ctrl+Click or ⌘+Click to select only one Namespace'}>Hide all</ToolbarButton>
+                                                <ToolbarButton variant={'primary'} onClick={this.showAll}>Show all</ToolbarButton>
+                                                <ToolbarButton variant={'primary'} onClick={this.hideAll} icon={'question-circle'} tooltip={'Use Ctrl+Click or ⌘+Click to select only one Namespace'}>Hide all</ToolbarButton>
                                             </ToolbarButtonRow>
 
                                         </div>
                                     </div>
 
-                                    <div className={cx(this.styles.overviewPanelBody)}>
-                                        <div className={cx(this.styles.clusterComponents)}>
-                                            <h2>Components</h2>
-                                            {this.state.clusterComponents.map((component: Component) => {
-                                                return (<ClusterComponent component={component} />)
-                                            })}
-                                        </div>
-                                    </div>
+                                    {this.isPanelOpen("__overview") && (
+                                        <>
+                                            <div className={cx(this.styles.overviewPanelBody)}>
+                                                <div className={cx(this.styles.clusterComponents)}>
+                                                    <h2>Components</h2>
+                                                    {this.state.clusterComponents.map((component: Component) => {
+                                                        return (<ClusterComponent component={component} />)
+                                                    })}
+                                                </div>
+                                                <div className={cx(this.styles.clusterNamespaces)}>
+                                                    {this.state.namespacesMap.map((namespace: Namespace) => {
+                                                        return (
+                                                            <div className={cx(this.styles.checkboxContainer)} >
+                                                                <input type="checkbox" id={"namespace_" + namespace.name}  checked={namespace.open} onClick={(e) => {this.namespaceClickHandler(e, namespace)}} />
+                                                                <span />
+                                                                <label htmlFor={"namespace_" + namespace.name} >{namespace.name}</label>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+
+                                        </>
+                                    )}
                                 </div>
                             </>
                         )}

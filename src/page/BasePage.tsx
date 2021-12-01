@@ -24,7 +24,7 @@ export class BasePage extends PureComponent<Props>{
     cluster_id : string;
     cluster: KubeGrafDatasource | undefined = undefined;
     promDs: any;
-    refreshRate: number;
+    refreshRate: number = 60 * 1000;
 
     isAdmin: boolean;
 
@@ -99,7 +99,12 @@ export class BasePage extends PureComponent<Props>{
 
      getCluster = async () => {
         this.cluster = ( await getDataSourceSrv().get(this.cluster_id).catch(e => undefined) ) as KubeGrafDatasource | undefined;
-        this.refreshRate = this.cluster?.instanceSettings.jsonData.refresh_pods_rate * 1000;
+        if(
+            this.cluster !== undefined
+            &&
+            this.cluster.instanceSettings.jsonData.refresh_pods_rate !== undefined
+        )
+            this.refreshRate = Number(this.cluster.instanceSettings.jsonData.refresh_pods_rate) * 1000;
     }
 
     getNodesMap = (withoutPods: boolean = false) => {
@@ -133,6 +138,10 @@ export class BasePage extends PureComponent<Props>{
                     namespaceStore.push({ name: ns.name, open: ns.open });
                 }
             });
+            this.setState({
+                ...this.state,
+                namespacesMap: this.namespacesMap
+            })
             store.setObject('namespaceStore', namespaceStore);
         });
     }

@@ -109,6 +109,13 @@ export const Styles = (isLight: boolean) => {
         }    
     `;
 
+    const clusterNamespaces = css `
+        display: flex;
+        align-content: flex-start;
+        flex-flow: wrap;
+        max-width: 700px;
+    `;
+
     const statusIndicator = css `
         display: block;
         min-width: 6px;
@@ -132,6 +139,51 @@ export const Styles = (isLight: boolean) => {
         } 
     `;
 
+    const checkboxContainer = css `
+        width: 165px;
+        display: flex;
+        margin-bottom: 6px;
+        margin-left: 10px;   
+        
+        input {
+            display: none;
+        }
+        
+        span {
+            position: absolute;
+            height: 16px;    
+            width: 16px;
+            border-radius: 3px;
+            border: 1px solid #555;
+            background: #141414;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        input:checked+span{
+            background: linear-gradient(0deg,#eb7b18,#d44a3a);
+            border: none;
+        }
+        
+        input:checked+span:before{
+            font-family: FontAwesome;
+            content: "\\f00c";
+            color: #141414;    
+        }
+
+        label {
+            font-size: 14px;
+            line-height: 16px;
+            min-height: 18px;
+            padding-left: 24px;
+            position: relative;
+            cursor: pointer;
+            color: #b8b8b8;    
+        }
+        
+    `;
+
 
     return {
         overviewPanel: overviewPanel,
@@ -151,7 +203,9 @@ export const Styles = (isLight: boolean) => {
         gfInline: gfInline,
 
         clusterComponents: clusterComponents,
+        clusterNamespaces: clusterNamespaces,
+        statusIndicator: statusIndicator,
 
-        statusIndicator: statusIndicator
+        checkboxContainer: checkboxContainer
     }
 }

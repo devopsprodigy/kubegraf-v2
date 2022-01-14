@@ -15,6 +15,7 @@ import {Namespace} from "../models/Namespace";
 import {Component} from "../models/Component";
 import {ClusterComponent} from "../components/ClusterComponent";
 import store from "../common/store";
+import {NamespaceCard} from "../components/NamespaceCard";
 
 
 
@@ -50,7 +51,7 @@ export class ApplicationsOverview extends BasePage{
                 this.setState({
                     ...this.state,
                     pageReady: true
-                })
+                });
             });
 
             this.getClusterComponents();
@@ -272,8 +273,8 @@ export class ApplicationsOverview extends BasePage{
                                 <div className={cx(this.styles.overviewPanel)}>
 
                                     <div className={cx(this.styles.header)}>
-                                        <div className={cx(this.styles.title)}>
-                                            <span onClick={this.togglePanel("__overview")} className={cx(this.styles.chevron, this.isPanelOpenClass('__overview'))}></span>
+                                        <div className={cx(this.styles.title)} onClick={this.togglePanel("__overview")} >
+                                            <span className={cx(this.styles.chevron, this.isPanelOpenClass('__overview'))}></span>
                                             <h1>Overview: {this.cluster?.instanceSettings.name}. Applications</h1>
                                         </div>
                                         <div className={cx(this.styles.overviewPanelBtn)}>
@@ -315,6 +316,17 @@ export class ApplicationsOverview extends BasePage{
                                         </>
                                     )}
                                 </div>
+
+                                {
+                                    this.state.namespacesMap.map((ns : Namespace) => {
+                                        return ns.open && (
+                                            <NamespaceCard
+                                                namespace={ns}
+                                                isPanelOpen={this.isPanelOpen(ns.name)}
+                                            />
+                                        )
+                                    })
+                                }
                             </>
                         )}
 

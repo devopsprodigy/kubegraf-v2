@@ -141,7 +141,7 @@ export class BasePage extends PureComponent<Props>{
             this.setState({
                 ...this.state,
                 namespacesMap: this.namespacesMap
-            })
+            });
             store.setObject('namespaceStore', namespaceStore);
         });
     }

@@ -58,6 +58,18 @@ export const Styles = (isLight: boolean) => {
         }
     `;
 
+    const status = css `
+        font-size: 14px;
+        color: #8e8e8e;
+        margin: 4px 0 0 20px;
+        min-width: 90px;
+        text-align: end;
+        
+        span {
+          color: #c04c21;
+        }    
+    `;
+
     const overviewPanelBtn = css `
         display: flex;
         min-width: 325px;
@@ -184,6 +196,29 @@ export const Styles = (isLight: boolean) => {
         
     `;
 
+    const namespacePanel = css `
+        background-color: #212124;
+        margin-bottom: 10px;
+        padding: 16px;
+        border-radius: 3px;
+        
+        .header {
+            padding: 16px 0;
+            display: flex;
+            justify-content: space-between;
+        }
+    `;
+
+    const namespacePanelBtn = css `
+        display: flex;
+        flex-wrap: wrap;
+    `;
+
+    const namespacePanelBody = css `
+        display: flex;
+        margin-top: 24px;
+    `;
+
 
     return {
         overviewPanel: overviewPanel,
@@ -192,6 +227,7 @@ export const Styles = (isLight: boolean) => {
 
         header: header,
         title: title,
+        status: status,
 
         overviewPanelBtn: overviewPanelBtn,
 
@@ -206,6 +242,10 @@ export const Styles = (isLight: boolean) => {
         clusterNamespaces: clusterNamespaces,
         statusIndicator: statusIndicator,
 
-        checkboxContainer: checkboxContainer
+        checkboxContainer: checkboxContainer,
+
+        namespacePanel: namespacePanel,
+        namespacePanelBtn: namespacePanelBtn,
+        namespacePanelBody: namespacePanelBody
     }
 }

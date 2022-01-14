@@ -217,10 +217,56 @@ export const Styles = (isLight: boolean) => {
     const namespacePanelBody = css `
         display: flex;
         margin-top: 24px;
+        
+        .column {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #161719;
+            
+            &:last-child {
+                border: none;
+            }    
+        }
+        
+        .column_header {
+            display: flex;
+            justify-content: space-between;
+            
+            h3 {
+                font-size: 18px;
+                margin: 0 0 24px 10px;    
+            }    
+        }
+    `;
+
+    const btn = css `
+        font-size: 12px;
+        padding: 0 20px;
+        line-height: 33px;
+        height: 33px;
+        cursor: pointer;
+        
+        &.btn-grey{
+            font-size: 12px;
+            padding: 8px 10px;
+            height: 30px;
+            line-height: 15px;
+            white-space: nowrap;
+            margin: 0 10px;
+            width: fit-content;
+            
+            color: ${isLight ? "initial" : "#b8b8b8" };
+            background-color: ${isLight ? "#dce1e6" : "#272729"};
+            box-shadow: ${isLight ? "1px 1px 1px 0 #b8b8b8" : "1px 1px 1px 0 black"};
+        }     
     `;
 
 
     return {
+
+        btn: btn,
+
         overviewPanel: overviewPanel,
         overviewPanelBody: overviewPanelBody,
         chevron: chevron,

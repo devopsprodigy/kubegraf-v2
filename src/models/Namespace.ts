@@ -1,9 +1,20 @@
 import {BaseModel} from "./BaseModel";
 import store from "../common/store";
+import {Deployment} from "./Deployment";
+import {Statefulset} from "./Statefulset";
+import {Daemonset} from "./Daemonset";
 
 export class Namespace extends BaseModel{
+
+    deployments: Deployment[];
+    statefulsets: Statefulset[];
+    daemonsets: Daemonset[];
+
     constructor(data: any) {
         super(data);
+        this.deployments = [];
+        this.statefulsets = [];
+        this.daemonsets = [];
     }
 
     toggle() {

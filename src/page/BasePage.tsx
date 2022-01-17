@@ -10,6 +10,11 @@ import {SelectableValue} from "@grafana/data";
 import {Namespace} from "../models/Namespace";
 import {Styles} from "../common/styles";
 import {Component} from "../models/Component";
+import {Deployment} from "../models/Deployment";
+import {Statefulset} from "../models/Statefulset";
+import {Daemonset} from "../models/Daemonset";
+import {Job} from "../models/Job";
+import {CronJob} from "../models/CronJob";
 
 interface Props{
     cluster_id: string
@@ -32,6 +37,12 @@ export class BasePage extends PureComponent<Props>{
     nodesError: Boolean | Error = false;
     namespacesMap: Namespace[] = [];
     storeComponents: Component[] = [];
+    storeDeployments: Deployment[] = [];
+    storeStatefulsets: Statefulset[] = [];
+    storeDaemonsets: Daemonset[] = [];
+    storeJobs: Job[] = [];
+    storeCronJobs: CronJob[] = [];
+
     componentsError: Boolean | Error = false;
 
     constructor(props: any) {
@@ -138,12 +149,74 @@ export class BasePage extends PureComponent<Props>{
                     namespaceStore.push({ name: ns.name, open: ns.open });
                 }
             });
-            this.setState({
-                ...this.state,
-                namespacesMap: this.namespacesMap
-            });
-            store.setObject('namespaceStore', namespaceStore);
+
+            let promises = [];
+            promises.push(this.attachDeployments());
+            promises.push(this.attachStatefulsets());
+            promises.push(this.attachDaemonsets());
+            promises.push(this.getCronJobs());
+            promises.push(this.getJobs());
+
+            Promise.all(promises)
+                .then(() => {
+                    this.setState({
+                        ...this.state,
+                        namespacesMap: this.namespacesMap
+                    });
+                    console.log(this.state);
+                    store.setObject('namespaceStore', namespaceStore);
+                })
         });
+    }
+
+    attachDeployments(){
+        return this.cluster?.getDeployments()
+            .then((deployments) => {
+                deployments.forEach((item : any) => {
+                    const deploy = new Deployment(item);
+                    let _ns = this.__getNamespace(item.metadata.namespace);
+                    this.storeDeployments.push(deploy);
+                    _ns.deployments.push(deploy)
+                });
+            })
+    }
+
+    attachStatefulsets(){
+        return this.cluster?.getStatefulsets()
+            .then((statefulsets) => {
+                statefulsets.forEach((item: any) => {
+                    const statefulSet = new Statefulset(item);
+                    let _ns = this.__getNamespace(item.metadata.namespace);
+                    this.storeStatefulsets.push(statefulSet);
+                    _ns.statefulsets.push(statefulSet);
+                })
+            })
+    }
+
+    attachDaemonsets(){
+        return this.cluster?.getDaemonsets()
+            .then((daemonsets) => {
+                daemonsets.forEach((item: any) => {
+                    const daemonset = new Daemonset(item);
+                    let _ns = this.__getNamespace(item.metadata.namespace);
+                    this.storeDaemonsets.push(daemonset);
+                    _ns.daemonsets.push(daemonset);
+                })
+            })
+    }
+
+    getJobs(){
+        return this.cluster?.getJobs()
+            .then((jobs) => {
+                this.storeJobs = jobs.map((job) => new Job(job));
+            })
+    }
+
+    getCronJobs(){
+        return this.cluster?.getCronjobs()
+            .then((cronjobs) => {
+                this.storeCronJobs = cronjobs.map((cronjob) => new CronJob(cronjob));
+            })
     }
 
 
@@ -177,4 +250,9 @@ export class BasePage extends PureComponent<Props>{
         });
     }
 
+    __getNamespace(namespace : string){
+        return this.namespacesMap.filter((ns) => {
+            return ns.name === namespace;
+        })[0];
+    }
 }

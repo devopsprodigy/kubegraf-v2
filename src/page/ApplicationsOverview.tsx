@@ -301,7 +301,7 @@ export class ApplicationsOverview extends BasePage{
                                                     })}
                                                 </div>
                                                 <div className={cx(this.styles.clusterNamespaces)}>
-                                                    {this.state.namespacesMap.map((namespace: Namespace) => {
+                                                    {this.state.namespacesMap.filter((namespace: Namespace) => !namespace.is_deleted).map((namespace: Namespace) => {
                                                         return (
                                                             <div className={cx(this.styles.checkboxContainer)} >
                                                                 <input type="checkbox" id={"namespace_" + namespace.name}  checked={namespace.open} onClick={(e) => {this.namespaceClickHandler(e, namespace)}} />
@@ -318,7 +318,7 @@ export class ApplicationsOverview extends BasePage{
                                 </div>
 
                                 {
-                                    this.state.namespacesMap.map((ns : Namespace) => {
+                                    this.state.namespacesMap.filter((namespace: Namespace) => !namespace.is_deleted).map((ns : Namespace) => {
                                         return ns.open && (
                                             <NamespaceCard
                                                 namespace={ns}

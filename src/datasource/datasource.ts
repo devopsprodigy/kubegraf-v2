@@ -95,6 +95,104 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
           });
   }
 
+  getDeployments(namespace = null){
+      return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'deployments').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = 'Deployments not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+
+              return res.data.items;
+          })
+          .catch(e => {
+              console.error(e);
+              const message = 'Deployments not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          });
+  }
+
+  getStatefulsets(namespace = null){
+      return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'statefulsets').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = 'Statefulsets not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+
+              return res.data.items;
+          })
+          .catch(e => {
+              console.error(e);
+              const message = 'Statefulsets not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
+  getDaemonsets(namespace = null){
+      return this.__get('/apis/apps/v1/' + this.__addNamespace(namespace) + 'daemonsets').toPromise()
+          .then((res : any) => {
+              if(!res.data.items){
+                  const message = 'Daemonsets not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+
+              return res.data.items;
+          })
+          .catch(e => {
+              console.error(e);
+              const message = 'Daemonsets not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
+  getJobs(){
+      return this.__get('/apis/batch/v1/jobs').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = 'Jobs not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+
+              return res.data.items;
+          })
+          .catch(e => {
+              console.error(e);
+              const message = 'Jobs not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
+  getCronjobs(){
+      return this.__get('/apis/batch/v1beta1/cronjobs').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = 'CronJobs not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+              return res.data.items;
+          })
+          .catch(e => {
+              console.error(e);
+              const message = 'CronJobs not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
+  __addNamespace(namespace : string | undefined | null){
+      return namespace ? `namespaces/${namespace}/` : '';
+  }
+
 
   __get(url : string) {
     let _url = '' + this.instanceSettings.url;

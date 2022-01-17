@@ -159,12 +159,19 @@ export class BasePage extends PureComponent<Props>{
 
             Promise.all(promises)
                 .then(() => {
-                    this.setState({
-                        ...this.state,
-                        namespacesMap: this.namespacesMap
-                    });
-                    console.log(this.state);
-                    store.setObject('namespaceStore', namespaceStore);
+                    this.attachJobs();
+                    this.attachCronJobs();
+
+                    let promises = [];
+                    Promise.all(promises)
+                        .then(() => {
+                            this.setState({
+                                ...this.state,
+                                namespacesMap: this.namespacesMap
+                            });
+                            console.log(this.state);
+                            store.setObject('namespaceStore', namespaceStore);
+                        })
                 })
         });
     }
@@ -208,14 +215,54 @@ export class BasePage extends PureComponent<Props>{
     getJobs(){
         return this.cluster?.getJobs()
             .then((jobs) => {
-                this.storeJobs = jobs.map((job) => new Job(job));
+                this.storeJobs = jobs.map((job: any) => new Job(job));
             })
+    }
+
+    attachJobs(){
+        this.namespacesMap.forEach((ns: Namespace) => {
+            let jobsList = this.storeJobs.filter((job: Job) => !job.data.metadata.ownerReferences && job.data.metadata.namespace === ns.name);
+            let nsCrons = this.storeCronJobs.filter((cron: CronJob) => cron.data.metadata.namespace === ns.name);
+            nsCrons.forEach((cj : CronJob) => {
+                let uid = cj.data.metadata.uid;
+                this.storeJobs.forEach((job : Job) => {
+                    if(job.data.metadata.ownerReferences){
+                        if (!job.data.metadata.ownerReferences.filter((item : any) => item.kind === 'CronJob' && item.uid === uid)[0]) {
+                            jobsList.push(job);
+                        }
+                    }
+                })
+            });
+
+            ns.jobs = jobsList;
+        });
+    }
+
+    attachCronJobs() {
+        this.namespacesMap.forEach((ns) => {
+            ns.cronjobs = this.storeCronJobs.filter((cron) => cron.data.metadata.namespace === ns.name);
+
+            ns.cronjobs.forEach((cj) => {
+                let uid = cj.data.metadata.uid;
+                let jobsList : any[] = [];
+
+                this.storeJobs.forEach((job) => {
+                    if (job.data.metadata.ownerReferences) {
+                        if (job.data.metadata.ownerReferences.filter((item: any) => item.kind === 'CronJob' && item.uid === uid)[0]) {
+                            jobsList.push(job);
+                        }
+                    }
+                });
+
+                cj.jobs = jobsList;
+            });
+        });
     }
 
     getCronJobs(){
         return this.cluster?.getCronjobs()
             .then((cronjobs) => {
-                this.storeCronJobs = cronjobs.map((cronjob) => new CronJob(cronjob));
+                this.storeCronJobs = cronjobs.map((cronjob: any) => new CronJob(cronjob));
             })
     }
 

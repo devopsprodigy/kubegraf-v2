@@ -149,6 +149,7 @@ export class BasePage extends PureComponent<Props>{
                     namespaceStore.push({ name: ns.name, open: ns.open });
                 }
             });
+            store.setObject('namespaceStore', namespaceStore);
 
             let promises = [];
             promises.push(this.attachDeployments());
@@ -170,7 +171,6 @@ export class BasePage extends PureComponent<Props>{
                                 namespacesMap: this.namespacesMap
                             });
                             console.log(this.state);
-                            store.setObject('namespaceStore', namespaceStore);
                         })
                 })
         });

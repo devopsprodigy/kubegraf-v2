@@ -5,6 +5,7 @@ import {Statefulset} from "./Statefulset";
 import {Daemonset} from "./Daemonset";
 import {Job} from "./Job";
 import {CronJob} from "./CronJob";
+import {Pod} from "../page/Pod";
 
 export class Namespace extends BaseModel{
 
@@ -13,6 +14,7 @@ export class Namespace extends BaseModel{
     daemonsets: Daemonset[];
     jobs: Job[];
     cronjobs: CronJob[];
+    other: Array<{pods: Pod[]}>;
 
     constructor(data: any) {
         super(data);
@@ -21,6 +23,7 @@ export class Namespace extends BaseModel{
         this.daemonsets = [];
         this.jobs = [];
         this.cronjobs = [];
+        this.other = [{pods: []}];
     }
 
     toggle() {

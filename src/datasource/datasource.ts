@@ -189,6 +189,43 @@ export class KubeGrafDatasource extends DataSourceApi<KubegrafDSQuery, KubegrafD
           })
   }
 
+  getServices(namespace = null){
+      return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'services').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = 'Services not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+
+              return res.data.items;
+          })
+          .catch(err => {
+              console.error(err);
+              const message = 'Services not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
+  getPods(namespace = null){
+      return this.__get('/api/v1/' + this.__addNamespace(namespace) + 'pods').toPromise()
+          .then((res: any) => {
+              if(!res.data.items){
+                  const message = 'Pods not received';
+                  appEvents.emit(AppEvents.alertError, [message]);
+                  return new Error(message);
+              }
+              return res.data.items;
+          })
+          .catch(err =>{
+              console.error(err);
+              const message = 'Pods not received';
+              appEvents.emit(AppEvents.alertError, [message]);
+              return new Error(message);
+          })
+  }
+
   __addNamespace(namespace : string | undefined | null){
       return namespace ? `namespaces/${namespace}/` : '';
   }

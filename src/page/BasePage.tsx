@@ -15,6 +15,8 @@ import {Statefulset} from "../models/Statefulset";
 import {Daemonset} from "../models/Daemonset";
 import {Job} from "../models/Job";
 import {CronJob} from "../models/CronJob";
+import {Service} from "../models/Service";
+import {Pod} from "./Pod";
 
 interface Props{
     cluster_id: string
@@ -42,8 +44,11 @@ export class BasePage extends PureComponent<Props>{
     storeDaemonsets: Daemonset[] = [];
     storeJobs: Job[] = [];
     storeCronJobs: CronJob[] = [];
+    storeServices: Service[] = [];
+    storePods: Pod[] = [];
 
     componentsError: Boolean | Error = false;
+    podsError: Boolean | Error = false;
 
     constructor(props: any) {
         super(props);
@@ -163,9 +168,12 @@ export class BasePage extends PureComponent<Props>{
                     this.attachJobs();
                     this.attachCronJobs();
 
-                    let promises : any[] = [];
-                    Promise.all(promises)
+                    let _promises : any[] = [];
+                    _promises.push(this.getAllServices());
+                    _promises.push(this.getPods());
+                    Promise.all(_promises)
                         .then(() => {
+                            this.attachPodsToMap();
                             this.setState({
                                 ...this.state,
                                 namespacesMap: this.namespacesMap
@@ -265,7 +273,12 @@ export class BasePage extends PureComponent<Props>{
             })
     }
 
-
+    getAllServices(){
+        return this.cluster?.getServices()
+            .then((services) => {
+                this.storeServices = services.map((service: any) => new Service(service))
+            })
+    }
 
     getNodes(){
         return this.cluster?.getNodes().then((nodes: any) => {
@@ -296,9 +309,94 @@ export class BasePage extends PureComponent<Props>{
         });
     }
 
+    getPods(skipEmptyHost = false){
+        return this.cluster?.getPods()
+            .then((pods) => {
+                if(pods instanceof Array){
+                    this.podsError = false;
+                    if(skipEmptyHost){
+                        pods = pods.filter((pod: any) => pod.status.hostIP !== undefined);
+                    }
+                    this.storePods = pods.map((pod: any) => new Pod(pod));
+                }else if(pods instanceof Error){
+                    this.podsError = pods;
+                }
+            })
+    }
+
+    attachPodsToMap(){
+        this.namespacesMap.forEach((ns: Namespace) => {
+            ns.deployments.forEach((dep : Deployment) => {
+                dep.pods = this.__findPodsBySelector(dep.data.spec.selector.matchLabels, ns.name);
+                dep.services = this.__findServices(dep);
+            });
+
+            ns.statefulsets.forEach((sts: Statefulset) => {
+                sts.pods = this.__findPodsBySelector(sts.data.spec.selector.matchLabels, ns.name);
+                sts.services = this.__findServices(sts);
+            });
+
+            ns.daemonsets.forEach((ds: Daemonset) => {
+                ds.pods = this.__findPodsBySelector(ds.data.spec.selector.matchLabels, ns.name);
+                ds.services = this.__findServices(ds);
+            });
+
+            ns.jobs.forEach((job: Job) => {
+                job.pods = this.__findPodsBySelector(job.data.metadata.labels, ns.name);
+            });
+
+            ns.cronjobs.forEach((cron: CronJob) => {
+               cron.jobs.map((job: Job) => {
+                   job.pods = this.__findPodsBySelector(job.data.metadata.labels, ns.name);
+               })
+            });
+
+            ns.other[0].pods = this.storePods.filter((pod: Pod) => !pod.used && pod.data.metadata.namespace === ns.name);
+
+        })
+    }
+
     __getNamespace(namespace : string){
         return this.namespacesMap.filter((ns) => {
             return ns.name === namespace;
         })[0];
+    }
+
+    __findServices(entity: Deployment|Statefulset|Daemonset) {
+        return this.storeServices.filter((item) => {
+            if (!item.data.spec || !item.data.spec.selector) {
+                return false;
+            }
+            let matchLabels = item.data.spec.selector;
+            let result = this.__findPodsBySelector(matchLabels, item.data.metadata.namespace, entity.pods);
+            if (result.length > 0) {
+                return true;
+            }
+
+            return false;
+        });
+    }
+
+    __findPodsBySelector(filter : any, namespace : string, pods = this.storePods){
+        return pods
+            .filter((item: Pod) => item.data.metadata.namespace === namespace)
+            .filter((item : Pod) => {
+                let labels = item.data.metadata.labels;
+
+                if (typeof labels === 'undefined') {
+                    return false;
+                } else {
+                    for (let prop in filter) {
+                        if (!labels.hasOwnProperty(prop)) {
+                            return false;
+                        }
+                        if (labels[prop] !== filter[prop]) {
+                            return false;
+                        }
+                    }
+                }
+                item.used = true;
+                return true;
+            });
     }
 }

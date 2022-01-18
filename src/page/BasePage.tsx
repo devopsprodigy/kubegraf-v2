@@ -151,7 +151,7 @@ export class BasePage extends PureComponent<Props>{
             });
             store.setObject('namespaceStore', namespaceStore);
 
-            let promises = [];
+            let promises : any[] = [];
             promises.push(this.attachDeployments());
             promises.push(this.attachStatefulsets());
             promises.push(this.attachDaemonsets());
@@ -163,7 +163,7 @@ export class BasePage extends PureComponent<Props>{
                     this.attachJobs();
                     this.attachCronJobs();
 
-                    let promises = [];
+                    let promises : any[] = [];
                     Promise.all(promises)
                         .then(() => {
                             this.setState({
@@ -221,15 +221,16 @@ export class BasePage extends PureComponent<Props>{
 
     attachJobs(){
         this.namespacesMap.forEach((ns: Namespace) => {
-            let jobsList = this.storeJobs.filter((job: Job) => !job.data.metadata.ownerReferences && job.data.metadata.namespace === ns.name);
+            const jobsList = this.storeJobs.filter((job: Job) => {
+                return job.data.metadata.ownerReferences == undefined && job.data.metadata.namespace === ns.name;
+            });
+
             let nsCrons = this.storeCronJobs.filter((cron: CronJob) => cron.data.metadata.namespace === ns.name);
             nsCrons.forEach((cj : CronJob) => {
                 let uid = cj.data.metadata.uid;
-                this.storeJobs.forEach((job : Job) => {
-                    if(job.data.metadata.ownerReferences){
-                        if (!job.data.metadata.ownerReferences.filter((item : any) => item.kind === 'CronJob' && item.uid === uid)[0]) {
-                            jobsList.push(job);
-                        }
+                this.storeJobs.filter((_j: Job) => _j.data.metadata.ownerReferences !== undefined).forEach((job : Job) => {
+                    if (job.data.metadata.ownerReferences.filter((item : any) => item.kind === 'CronJob' && item.uid === uid)[0]) {
+                        jobsList.push(job);
                     }
                 })
             });
@@ -246,11 +247,9 @@ export class BasePage extends PureComponent<Props>{
                 let uid = cj.data.metadata.uid;
                 let jobsList : any[] = [];
 
-                this.storeJobs.forEach((job) => {
-                    if (job.data.metadata.ownerReferences) {
-                        if (job.data.metadata.ownerReferences.filter((item: any) => item.kind === 'CronJob' && item.uid === uid)[0]) {
-                            jobsList.push(job);
-                        }
+                this.storeJobs.filter((_j: Job) => _j.data.metadata.ownerReferences !== undefined).forEach((job) => {
+                    if (job.data.metadata.ownerReferences.filter((item: any) => item.kind === 'CronJob' && item.uid === uid)[0]) {
+                        jobsList.push(job);
                     }
                 });
 

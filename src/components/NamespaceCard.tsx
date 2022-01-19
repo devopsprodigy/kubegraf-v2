@@ -9,6 +9,8 @@ import {Statefulset} from "../models/Statefulset";
 import {StatefulsetCard} from "./StatefulsetCard";
 import {DaemonsetCard} from "./DaemonsetCard";
 import {Daemonset} from "../models/Daemonset";
+import {CronJob} from "../models/CronJob";
+import {CronjobCard} from "./CronjobCard";
 
 interface Props {
     namespace: Namespace;
@@ -39,7 +41,7 @@ const startColumns = [
     },
     {
         colName: 'Cron Jobs',
-        nsKey: 'cronJobs',
+        nsKey: 'cronjobs',
         isOpen: false
     },
     {
@@ -116,11 +118,11 @@ export class NamespaceCard extends PureComponent<Props>{
                     </div>
                     <div className={cx(this.styles.namespacePanelBtn)}>
 
-                        {!this.isColOpen('cronJobs') && (
+                        {!this.isColOpen('cronjobs') && (
                             <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
-                                this.toggleCol('cronJobs');
+                                this.toggleCol('cronjobs');
                             }}>
-                                SHOW CronJobs ({this.namespace.cronJobs ? this.namespace.cronJobs.length : 0})
+                                SHOW CronJobs ({this.namespace.cronjobs ? this.namespace.cronjobs.length : 0})
                             </span>
                         )}
 
@@ -152,9 +154,9 @@ export class NamespaceCard extends PureComponent<Props>{
                                             <div className={'column'}>
                                                 <div className={'column_header'}>
                                                     <h3>{col.colName}</h3>
-                                                    {col.nsKey === "cronJobs" && (
+                                                    {col.nsKey === "cronjobs" && (
                                                         <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
-                                                            this.toggleCol('cronJobs');
+                                                            this.toggleCol('cronjobs');
                                                         }}>HIDE</span>
                                                     )}
                                                     {col.nsKey === "jobs" && (
@@ -206,6 +208,21 @@ export class NamespaceCard extends PureComponent<Props>{
                                                         ||
                                                         (
                                                             this.namespace.daemonsets.length === 0 && (
+                                                                <div className={'column_cell'}>
+                                                                    <h4 className={'column_cell_header'}>No data</h4>
+                                                                </div>
+                                                            )
+                                                        )
+                                                    )
+                                                )}
+                                                {col.nsKey === 'cronjobs' && (
+                                                    (
+                                                        (
+                                                        this.namespace.cronjobs.length > 0 && this.namespace.cronjobs.map((cron: CronJob) => <CronjobCard clusterName={this.clusterName} cronjob={cron}/>)
+                                                        )
+                                                        ||
+                                                        (
+                                                            this.namespace.cronjobs.length === 0 && (
                                                                 <div className={'column_cell'}>
                                                                     <h4 className={'column_cell_header'}>No data</h4>
                                                                 </div>

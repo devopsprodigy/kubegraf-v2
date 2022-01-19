@@ -27,8 +27,4 @@ export class BaseModel{
     toggle() {
         this.open = !this.open;
     }
-
-    showAllPods() {
-        this.limit = false;
-    }
 }

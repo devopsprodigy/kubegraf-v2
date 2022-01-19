@@ -238,6 +238,90 @@ export const Styles = (isLight: boolean) => {
                 margin: 0 0 24px 10px;    
             }    
         }
+        
+        .column_cell{
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #161719;
+            margin-bottom: 6px;
+            padding: 0 10px 12px;
+            
+            &:last-child {
+                border: none;
+            }     
+            
+            .pod{
+                display: flex;
+                line-height: initial;
+                font-size: 12px;
+                
+                a{
+                    line-height: 18px
+                }
+            }    
+            
+            .services{
+                margin-top: 12px;
+                
+                h5{
+                    font-size: 14px;
+                    line-height: initial;
+                    margin-left: 14px;
+                    margin-bottom: 6px;     
+                }
+                
+                .service{
+                    display: flex;
+                    margin-left: 6px;    
+                }
+                
+                .service_title{
+                    line-height: initial;
+                    font-size: 12px;
+                    
+                    span{
+                        color: #8e8e8e;
+                        line-height: 14px;
+                        font-size: 12px;
+                        border-right: 1px solid #2f2f32;
+                        margin-right: 5px;
+                        padding-right: 5px;
+                        
+                        &:last-child{
+                            border: none;
+                            margin: 0;
+                            padding: 0;    
+                        }    
+                    }
+                }
+            }
+            
+            .pod_title{
+                top: 3px;
+                position: relative;
+            }
+           
+            .btn-grey{
+                width: fit-content;
+                margin-top: 10px;
+            }
+            
+            i {
+                color: #b8b8b8;
+                font-size: 12px;
+                &:hover{
+                  color: #eaeaea;
+                }
+            }
+              
+            h4 {
+                margin-bottom: 6px;
+            }
+        }
+        
+        .column_cell_header{
+            font-size: 14px;
+        }
     `;
 
     const btn = css `
@@ -262,10 +346,21 @@ export const Styles = (isLight: boolean) => {
         }     
     `;
 
+    const dotGrey = css `
+        display: block;
+        min-width: 3px;
+        width: 3px;
+        height: 3px;
+        border-radius: 100%;
+        margin-top: 5px;
+        margin-right: 5px;
+        background-color: #555555;
+    `;
 
     return {
 
         btn: btn,
+        dotGrey: dotGrey,
 
         overviewPanel: overviewPanel,
         overviewPanelBody: overviewPanelBody,

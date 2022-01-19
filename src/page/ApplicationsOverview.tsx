@@ -268,7 +268,7 @@ export class ApplicationsOverview extends BasePage{
 
 
 
-                        {this.state.pageReady && (
+                        {this.state.pageReady && this.cluster && (
                             <>
                                 <div className={cx(this.styles.overviewPanel)}>
 
@@ -322,6 +322,7 @@ export class ApplicationsOverview extends BasePage{
                                         return ns.open && (
                                             <NamespaceCard
                                                 namespace={ns}
+                                                clusterName={this.cluster?.name}
                                                 isPanelOpen={this.isPanelOpen(ns.name)}
                                             />
                                         )

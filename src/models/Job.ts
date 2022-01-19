@@ -1,5 +1,5 @@
 import {BaseModel} from "./BaseModel";
-import {Pod} from "../page/Pod";
+import {Pod} from "./Pod";
 
 export class Job extends BaseModel{
     pods: Pod[];

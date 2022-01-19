@@ -16,7 +16,7 @@ import {Daemonset} from "../models/Daemonset";
 import {Job} from "../models/Job";
 import {CronJob} from "../models/CronJob";
 import {Service} from "../models/Service";
-import {Pod} from "./Pod";
+import {Pod} from "../models/Pod";
 
 interface Props{
     cluster_id: string

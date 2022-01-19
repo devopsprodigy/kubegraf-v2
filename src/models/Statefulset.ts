@@ -1,5 +1,5 @@
 import {BaseModel} from "./BaseModel";
-import {Pod} from "../page/Pod";
+import {Pod} from "./Pod";
 import {Service} from "./Service";
 
 export class Statefulset extends BaseModel{

@@ -3,10 +3,13 @@ import React, {PureComponent} from "react";
 import {Styles} from "../common/styles";
 import {isLight} from "../common/utils";
 import {cx} from "@emotion/css";
+import {DeploymentCard} from "./DeploymentCard";
+import {Deployment} from "../models/Deployment";
 
 interface Props {
     namespace: Namespace;
     isPanelOpen: boolean;
+    clusterName: string | undefined;
 };
 
 const startColumns = [
@@ -44,6 +47,7 @@ const startColumns = [
 
 export class NamespaceCard extends PureComponent<Props>{
     private namespace;
+    private clusterName;
     styles;
 
     state = {
@@ -55,6 +59,7 @@ export class NamespaceCard extends PureComponent<Props>{
         super(props);
         this.styles = Styles(isLight());
         this.namespace = props.namespace;
+        this.clusterName = props.clusterName;
     }
 
     isPanelOpenClass(){
@@ -137,29 +142,47 @@ export class NamespaceCard extends PureComponent<Props>{
                 {
                     this.state.isPanelOpen && (
                         <div className={cx(this.styles.namespacePanelBody)}>
-                            {
-                                this.state.columns.map((col: any) => {
+                            {this.state.columns.map((col: any) => {
                                     return col.isOpen && (
-                                        <div className={'column'}>
-                                            <div className={'column_header'}>
-                                                <h3>{col.colName}</h3>
-                                                {col.nsKey === "cronJobs" && (
-                                                    <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
-                                                        this.toggleCol('cronJobs');
-                                                    }}>HIDE</span>
-                                                )}
-                                                {col.nsKey === "jobs" && (
-                                                    <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
-                                                        this.toggleCol('jobs');
-                                                    }}>HIDE</span>
-                                                )}
-                                                {col.nsKey === "other" && (
-                                                    <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
-                                                        this.toggleCol('other');
-                                                    }}>HIDE</span>
-                                                )}
+                                        <>
+                                            <div className={'column'}>
+                                                <div className={'column_header'}>
+                                                    <h3>{col.colName}</h3>
+                                                    {col.nsKey === "cronJobs" && (
+                                                        <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
+                                                            this.toggleCol('cronJobs');
+                                                        }}>HIDE</span>
+                                                    )}
+                                                    {col.nsKey === "jobs" && (
+                                                        <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
+                                                            this.toggleCol('jobs');
+                                                        }}>HIDE</span>
+                                                    )}
+                                                    {col.nsKey === "other" && (
+                                                        <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
+                                                            this.toggleCol('other');
+                                                        }}>HIDE</span>
+                                                    )}
+                                                </div>
+                                                {col.nsKey === 'deployments' && (
+                                                    (
+                                                        (
+                                                        this.namespace.deployments.length > 0 && this.namespace.deployments.map((deployment: Deployment) => <DeploymentCard clusterName={this.clusterName} deployment={deployment}/>)
+                                                        )
+                                                        ||
+                                                        (
+                                                            this.namespace.deployments.length === 0 && (
+                                                                <div className={'column_cell'}>
+                                                                    <h4 className={'column_cell_header'}>No data</h4>
+                                                                </div>
+                                                            )
+                                                        )
+                                                    )
+                                                )
+
+                                                }
                                             </div>
-                                        </div>
+                                        </>
                                     )
                                 })
                             }

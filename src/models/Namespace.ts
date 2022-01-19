@@ -5,7 +5,7 @@ import {Statefulset} from "./Statefulset";
 import {Daemonset} from "./Daemonset";
 import {Job} from "./Job";
 import {CronJob} from "./CronJob";
-import {Pod} from "../page/Pod";
+import {Pod} from "./Pod";
 
 export class Namespace extends BaseModel{
 

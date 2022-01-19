@@ -7,6 +7,8 @@ import {DeploymentCard} from "./DeploymentCard";
 import {Deployment} from "../models/Deployment";
 import {Statefulset} from "../models/Statefulset";
 import {StatefulsetCard} from "./StatefulsetCard";
+import {DaemonsetCard} from "./DaemonsetCard";
+import {Daemonset} from "../models/Daemonset";
 
 interface Props {
     namespace: Namespace;
@@ -189,6 +191,21 @@ export class NamespaceCard extends PureComponent<Props>{
                                                         ||
                                                         (
                                                             this.namespace.statefulsets.length === 0 && (
+                                                                <div className={'column_cell'}>
+                                                                    <h4 className={'column_cell_header'}>No data</h4>
+                                                                </div>
+                                                            )
+                                                        )
+                                                    )
+                                                )}
+                                                {col.nsKey === 'daemonsets' && (
+                                                    (
+                                                        (
+                                                        this.namespace.daemonsets.length > 0 && this.namespace.daemonsets.map((daemonset: Daemonset) => <DaemonsetCard clusterName={this.clusterName} daemonset={daemonset}/>)
+                                                        )
+                                                        ||
+                                                        (
+                                                            this.namespace.daemonsets.length === 0 && (
                                                                 <div className={'column_cell'}>
                                                                     <h4 className={'column_cell_header'}>No data</h4>
                                                                 </div>

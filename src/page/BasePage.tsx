@@ -178,6 +178,10 @@ export class BasePage extends PureComponent<Props>{
                                 ...this.state,
                                 namespacesMap: this.namespacesMap
                             });
+                            const checker = this.namespacesMap.filter((ns: Namespace) => {
+                                return ns.other[0].pods.length > 0;
+                            });
+                            console.log(checker);
                             console.log(this.state);
                         })
                 })

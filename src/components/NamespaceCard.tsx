@@ -11,6 +11,7 @@ import {DaemonsetCard} from "./DaemonsetCard";
 import {Daemonset} from "../models/Daemonset";
 import {CronJob} from "../models/CronJob";
 import {CronjobCard} from "./CronjobCard";
+import {JobCard} from "./JobCard";
 
 interface Props {
     namespace: Namespace;
@@ -223,6 +224,21 @@ export class NamespaceCard extends PureComponent<Props>{
                                                         ||
                                                         (
                                                             this.namespace.cronjobs.length === 0 && (
+                                                                <div className={'column_cell'}>
+                                                                    <h4 className={'column_cell_header'}>No data</h4>
+                                                                </div>
+                                                            )
+                                                        )
+                                                    )
+                                                )}
+                                                {col.nsKey === 'jobs' && (
+                                                    (
+                                                        (
+                                                        this.namespace.jobs.length > 0 && this.namespace.jobs.map((job: Job) => <JobCard clusterName={this.clusterName} job={job}/>)
+                                                        )
+                                                        ||
+                                                        (
+                                                            this.namespace.jobs.length === 0 && (
                                                                 <div className={'column_cell'}>
                                                                     <h4 className={'column_cell_header'}>No data</h4>
                                                                 </div>

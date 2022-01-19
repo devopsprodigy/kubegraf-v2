@@ -12,6 +12,9 @@ import {Daemonset} from "../models/Daemonset";
 import {CronJob} from "../models/CronJob";
 import {CronjobCard} from "./CronjobCard";
 import {JobCard} from "./JobCard";
+import {Job} from "../models/Job";
+import {Pod} from "../models/Pod";
+import {PodCard} from "./PodCard";
 
 interface Props {
     namespace: Namespace;
@@ -139,7 +142,7 @@ export class NamespaceCard extends PureComponent<Props>{
                             <span className={cx(this.styles.btn, 'btn-grey')} onClick={() => {
                                 this.toggleCol('other');
                             }}>
-                                SHOW Other Pods ({this.namespace.otherPods ? this.namespace.otherPods.length : 0})
+                                SHOW Other Pods ({this.namespace.other[0].pods.length ? this.namespace.other[0].pods.length : 0})
                             </span>
                         )}
 
@@ -243,6 +246,29 @@ export class NamespaceCard extends PureComponent<Props>{
                                                                     <h4 className={'column_cell_header'}>No data</h4>
                                                                 </div>
                                                             )
+                                                        )
+                                                    )
+                                                )}
+                                                {col.nsKey === 'other' && (
+                                                    (
+                                                        this.namespace.other[0].pods.length > 0
+                                                        &&
+                                                        this.namespace.other[0].pods.map((pod: Pod) => {
+                                                            return (
+                                                                <div className={'column_cell'}>
+                                                                    <PodCard pod={pod} clusterName={this.clusterName}/>
+                                                                </div>
+                                                            )
+                                                        })
+                                                    )
+                                                    ||
+                                                    (
+                                                        this.namespace.other[0].pods.length === 0
+                                                        &&
+                                                        (
+                                                            <div className={'column_cell'}>
+                                                                <h4 className={'column_cell_header'}>No data</h4>
+                                                            </div>
                                                         )
                                                     )
                                                 )}

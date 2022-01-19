@@ -5,7 +5,7 @@ export class BaseModel{
     data: any;
     is_deleted: boolean;
     open: boolean;
-    limit: number | boolean;
+    limit: number ;
 
     constructor(data: any) {
         this.name = data.metadata.name;

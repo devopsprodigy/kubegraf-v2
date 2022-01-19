@@ -5,6 +5,8 @@ import {isLight} from "../common/utils";
 import {cx} from "@emotion/css";
 import {DeploymentCard} from "./DeploymentCard";
 import {Deployment} from "../models/Deployment";
+import {Statefulset} from "../models/Statefulset";
+import {StatefulsetCard} from "./StatefulsetCard";
 
 interface Props {
     namespace: Namespace;
@@ -178,9 +180,22 @@ export class NamespaceCard extends PureComponent<Props>{
                                                             )
                                                         )
                                                     )
-                                                )
-
-                                                }
+                                                )}
+                                                {col.nsKey === 'statefulsets' && (
+                                                    (
+                                                        (
+                                                        this.namespace.statefulsets.length > 0 && this.namespace.statefulsets.map((statefulset: Statefulset) => <StatefulsetCard clusterName={this.clusterName} statefulset={statefulset}/>)
+                                                        )
+                                                        ||
+                                                        (
+                                                            this.namespace.statefulsets.length === 0 && (
+                                                                <div className={'column_cell'}>
+                                                                    <h4 className={'column_cell_header'}>No data</h4>
+                                                                </div>
+                                                            )
+                                                        )
+                                                    )
+                                                )}
                                             </div>
                                         </>
                                     )
